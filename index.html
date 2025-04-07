@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pooja Blog | Your Personal Storytelling Space</title>
+    <style>
+        :root {
+            --primary-color: #83CCD2; /* Main color - deepest teal */
+            --secondary-color: #C6EAEE; /* Background color - lightest teal */
+            --accent-color: #B1E8ED; /* Secondary accent color - medium teal */
+            --text-color: #333; /* Text color - keeping dark for readability */
+            --light-gray: #e6f7f9; /* Light background for cards - very light teal */
+            --box-shadow: 0 4px 10px rgba(131, 204, 210, 0.2);
+            --border-color: #B1E8ED;
+            --sidebar-width: 280px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            min-height: calc(100vh - 72px);
+            position: fixed;
+            left: 0;
+            top: 72px;
+            z-index: 90;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar-hidden .sidebar {
+            transform: translateX(-100%);
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s ease;
+        }
+        
+        .sidebar-hidden .content-wrapper {
+            margin-left: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .sidebar-toggle {
+            position: fixed;
+            left: var(--sidebar-width);
+            top: 85px;
+            z-index: 100;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: left 0.3s ease;
+        }
+        
+        .sidebar-hidden .sidebar-toggle {
+            left: 0;
+        }
+        
+        /* Header */
+        header {
+            background-color: #fff;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        .logo span {
+            color: var(--accent-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #5D969A; /* Darker shade of teal */
+        }
+        
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--text-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+        }
+        
+        .btn-accent:hover {
+            background-color: #8CC5C9; /* Darker shade */
+        }
+        
+        .btn-delete {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background-color: #e05555;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 60px 0;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .hero-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        /* Featured Posts */
+        .featured-posts {
+            padding: 60px 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 30px;
+            color: var(--primary-color);
+        }
+        
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .post-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .post-content {
+            padding: 20px;
+        }
+        
+        .post-category {
+            display: inline-block;
+            background-color: var(--light-gray);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .post-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .post-excerpt {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        /* Categories Section */
+        .categories {
+            padding: 60px 0;
+        }
+        
+        .categories-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .category-card {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 30px 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .category-icon {
+            font-size: 30px;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        .category-card:hover .category-icon {
+            color: white;
+        }
+        
+        .category-card h3 {
+            margin-bottom: 10px;
+        }
+        
+        /* Editor's Choice */
+        .editors-choice {
+            padding: 60px 0;
+            background-color: white;
+        }
+        
+        .featured-story {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            padding: 30px;
+            border-radius: 15px;
+            background-color: var(--light-gray);
+        }
+        
+        .featured-story-image {
+            flex: 1;
+        }
+        
+        .featured-story-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .featured-story-content {
+            flex: 1;
+        }
+        
+        .featured-story-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .featured-story-excerpt {
+            margin-bottom: 20px;
+        }
+        
+        .read-more-btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .read-more-btn:hover {
+            background-color: #8CC5C9;
+        }
+        
+        /* Editor Section */
+        .editor-section {
+            padding: 40px 0;
+            display: none;
+        }
+        
+        .editor-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M8 12l-6-6h12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+        
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: var(--light-gray);
+            border-radius: 5px;
+        }
+        
+        .toolbar button {
+            padding: 8px 12px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .toolbar button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .editor-content {
+            min-height: 400px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: white;
+        }
+        
+        .editor-content:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(150%);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        /* User Profile in Sidebar */
+        .user-profile {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 3px solid var(--primary-color);
+            padding: 3px;
+        }
+        
+        .user-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .user-bio {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .profile-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .profile-btn {
+            background-color: var(--light-gray);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .profile-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar-nav {
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-nav-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu-item {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu-link:hover, 
+        .sidebar-menu-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .sidebar-menu-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        /* Time Zones */
+        .time-zones {
+            background-color: var(--light-gray);
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 30px;
+        }
+        
+        .time-zones-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #777;
+        }
+        
+        .time-zone {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .time-zone-name {
+            font-weight: 500;
+        }
+        
+        /* Post Actions Menu */
+        .post-actions-menu {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 5;
+        }
+        
+        .post-actions-toggle {
+            background: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .post-actions-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            width: 150px;
+            display: none;
+            z-index: 10;
+        }
+        
+        .post-actions-dropdown.show {
+            display: block;
+        }
+        
+        .post-action-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .post-action-item:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .post-action-icon {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            padding: 20px;
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .mobile-menu-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .mobile-nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 18px;
+            font-weight: 500;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        /* Editor form content */
+        .editor-textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .editor-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .editor-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .editor-buttons button {
+            padding: 10px 20px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .content-wrapper {
+                margin-left: 0;
+            }
+            
+            .sidebar-toggle {
+                left: 0;
+            }
+            
+            body.sidebar-visible .sidebar {
+                transform: translateX(0);
+            }
+            
+            body.sidebar-visible .sidebar-toggle {
+                left: var(--sidebar-width);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-text {
+                padding-right: 0;
+                margin-bottom: 40px;
+            }
+            
+            .featured-story {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .action-buttons {
+                order: -1;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            body.sidebar-visible .sidebar-toggle {
+                left: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <div class="mobile-menu-header">
+            <div class="logo">Welcome to <span>Pooja Blog</span></div>
+            <button class="mobile-menu-close">×</button>
+        </div>
+        <div class="mobile-nav-links">
+            <a href="#" class="nav-dashboard">Dashboard</a>
+            <a href="#" class="nav-create">Create New Story</a>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast">
+        <span class="toast-message"></span>
+        <button class="toast-close">×</button>
+    </div>
+    
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo" style="text-align: center; width: 100%;">Welcome to <span>Pooja Blog</span></div>
+                <button class="btn create-post-btn">New Story</button>
+                <button class="mobile-menu-btn">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <img src="/api/placeholder/200/200" alt="Profile Photo" class="profile-photo">
+                <h3 class="user-name">Pooja</h3>
+                <p class="user-bio">Storyteller, novelist, and lifelong learner sharing my journey with you.</p>
+                <div class="profile-actions">
+                    <button class="profile-btn">Edit Profile</button>
+                    <button class="profile-btn" style="background-color: #ff6b6b; color: white;">Delete</button>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <h4 class="sidebar-nav-title">Main Navigation</h4>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link active">
+                            <span class="sidebar-menu-icon">🏠</span>
+                            Home
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">📖</span>
+                            Stories
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">📚</span>
+                            Novels
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">💡</span>
+                            Study Tips
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">ℹ️</span>
+                            About
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">📊</span>
+                            Dashboard
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <nav class="sidebar-nav">
+                <h4 class="sidebar-nav-title">My Content</h4>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">📝</span>
+                            My Stories
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">📔</span>
+                            My Novels
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">🔖</span>
+                            Saved Drafts
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">❤️</span>
+                            Feelings & Reflections
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <nav class="sidebar-nav">
+                <h4 class="sidebar-nav-title">Categories</h4>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">📅</span>
+                            Daily Stories
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">🔍</span>
+                            Mystery & Thriller
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">🚀</span>
+                            Science Fiction
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">🧠</span>
+                            Productivity
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <span class="sidebar-menu-icon">🎭</span>
+                            Poetry & Art
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="time-zones">
+                <h4 class="time-zones-title">Time Zones</h4>
+                <div class="time-zone">
+                    <span class="time-zone-name">🇮🇳 India (IST)</span>
+                    <span class="time-zone-time india-time">--:--:--</span>
+                </div>
+                <div class="time-zone">
+                    <span class="time-zone-name">🇬🇧 UK (GMT/BST)</span>
+                    <span class="time-zone-time uk-time">--:--:--</span>
+                </div>
+            </div>
+        </aside>
+        
+        <button class="sidebar-toggle">❮</button>
+        
+        <div class="content-wrapper">
+            <!-- Home Page Content -->
+            <div class="homepage">
+                <!-- Hero Section -->
+                <section class="hero">
+                    <div class="container">
+                        <div class="hero-content">
+                            <div class="hero-text">
+                                <h1 style="text-align: center;">Welcome to Pooja Blog</h1>
+                                <p style="text-align: center;">A personal space where you can express your thoughts, share your stories, novels, and study tips with the world. Let your creativity flow.</p>
+                                <button class="btn create-post-btn">Start Writing Now</button>
+                            </div>
+                            <div class="hero-image">
+                                <img src="/api/placeholder/600/400" alt="Writer's workspace">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                
