@@ -3,442 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pooja Blog | Your Personal Storytelling Space</title>
+    <title>Pooja's Blog Canvas</title>
     <style>
-        :root {
-            --primary-color: #83CCD2; /* Main color - teal */
-            --secondary-color: #C6EAEE; /* Background color - light teal */
-            --accent-color: #B1E8ED; /* Secondary accent color */
-            --text-color: #333; 
-            --light-gray: #e6f7f9;
-            --box-shadow: 0 4px 10px rgba(131, 204, 210, 0.2);
-            --border-color: #B1E8ED;
-            --sidebar-width: 280px;
-        }
-        
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            min-height: 100vh;
             display: flex;
-            flex-direction: column;
-        }
-        
-        .main-content {
-            display: flex;
-            flex: 1;
-        }
-        
-        /* Sidebar Styles */
-        .sidebar {
-            width: var(--sidebar-width);
-            background-color: white;
-            box-shadow: var(--box-shadow);
-            padding: 25px;
-            min-height: calc(100vh - 72px);
-            position: fixed;
-            left: 0;
-            top: 72px;
-            z-index: 90;
-            overflow-y: auto;
-            transition: transform 0.3s ease;
-        }
-        
-        .sidebar-hidden .sidebar {
-            transform: translateX(-100%);
-        }
-        
-        .content-wrapper {
-            flex: 1;
-            margin-left: var(--sidebar-width);
-            transition: margin-left 0.3s ease;
-        }
-        
-        .sidebar-hidden .content-wrapper {
-            margin-left: 0;
-        }
-        
-        .sidebar-toggle {
-            position: fixed;
-            left: var(--sidebar-width);
-            top: 85px;
-            z-index: 100;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            transition: left 0.3s ease;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
         }
-        
-        .sidebar-hidden .sidebar-toggle {
-            left: 0;
-        }
-        
-        /* User Profile in Sidebar */
-        .user-profile {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .profile-photo-container {
-            width: 120px;
-            height: 120px;
-             margin: 0 auto 15px;
-            border-radius: 50%;
-            border: 3px solid var(--primary-color);
-            padding: 3px;
+
+        .canvas-container {
+            width: 600px;
+            height: 400px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
             overflow: hidden;
         }
 
-        .profile-photo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-        
-        .user-name {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .user-bio {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        
-        .profile-actions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .profile-btn {
-            background-color: var(--light-gray);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .profile-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        /* Sidebar Navigation */
-        .sidebar-nav {
-            margin-bottom: 30px;
+        .welcome-text {
+            font-size: 48px;
+            color: #333333;
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .sidebar-menu {
-            list-style: none;
+        /* Optional decorative elements */
+        .canvas-container::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
+            animation: rotate 20s linear infinite;
+            opacity: 0.3;
         }
-        
-        .sidebar-menu-item {
-            margin-bottom: 10px;
-        }
-        
-        .sidebar-menu-link {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: var(--text-color);
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-        
-        .sidebar-menu-link:hover, 
-        .sidebar-menu-link.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .sidebar-menu-icon {
-            margin-right: 10px;
-            font-size: 18px;
-        }
-        
-        /* Header Styles */
-        header {
-            background-color: #fff;
-            box-shadow: var(--box-shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            width: 100%;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-color);
-            cursor: pointer;
-        }
-        
-        .logo span {
-            color: var(--accent-color);
-        }
-        
-        .btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .btn:hover {
-            background-color: #5D969A;
-        }
-        
-        .btn-delete {
-            background-color: #ff6b6b;
-            color: white;
-        }
-        
-        .btn-delete:hover {
-            background-color: #e05555;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            
-            .content-wrapper {
-                margin-left: 0;
-            }
-            
-            .sidebar-toggle {
-                left: 0;
-            }
-            
-            body.sidebar-visible .sidebar {
-                transform: translateX(0);
-            }
-            
-            body.sidebar-visible .sidebar-toggle {
-                left: var(--sidebar-width);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            body.sidebar-visible .sidebar-toggle {
-                left: 300px;
-            }
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
-<body class="sidebar-hidden">
-    <!-- Header Section -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo" style="text-align: center; width: 100%;">Welcome to <span>Pooja Blog</span></div>
-                <button class="btn create-post-btn">New Story</button>
-            </nav>
-        </div>
-    </header>
-
-    <div class="main-content">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="user-profile">
-                <!-- Changed this part to use the proper container structure -->
-                <div class="profile-photo-container">
-                  <img src="your-photo-url.jpg" alt="Profile Photo" class="profile-photo">
-                </div>
-                <h3 class="user-name">Pooja</h3>
-                <p class="user-bio">Storyteller, novelist, and lifelong learner sharing my journey with you.</p>
-                <div class="profile-actions">
-                    <button class="profile-btn">Edit Profile</button>
-                    <button class="profile-btn" style="background-color: #ff6b6b; color: white;">Delete</button>
-                </div>
-            </div>
-            
-            <nav class="sidebar-nav">
-                <!-- Removed "Main Navigation" text -->
-                <ul class="sidebar-menu">
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link active">
-                            <span class="sidebar-menu-icon">🏠</span>
-                            Home
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <span class="sidebar-menu-icon">📖</span>
-                            Stories
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <span class="sidebar-menu-icon">📚</span>
-                            Novels
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <span class="sidebar-menu-icon">💡</span>
-                            Study Tips
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <span class="sidebar-menu-icon">ℹ️</span>
-                            About
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <span class="sidebar-menu-icon">📊</span>
-                            Dashboard
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <nav class="sidebar-nav">
-                <ul class="sidebar-menu">
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <span class="sidebar-menu-icon">📅</span>
-                            Daily Stories
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <span class="sidebar-menu-icon">🔍</span>
-                            Mystery & Thriller
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <span class="sidebar-menu-icon">🚀</span>
-                            Science Fiction
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <span class="sidebar-menu-icon">🧠</span>
-                            Productivity
-                        </a>
-                    </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <span class="sidebar-menu-icon">🎭</span>
-                            Poetry & Art
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-        
-        <!-- Sidebar Toggle Button -->
-        <button class="sidebar-toggle">❮</button>
-        
-        <div class="content-wrapper">
-            <!-- Main content goes here -->
-            <div class="container">
-                <h1>Welcome to Pooja Blog</h1>
-                <p>Your content goes here</p>
-            </div>
-        </div>
+<body>
+    <div class="canvas-container">
+        <div class="welcome-text">Welcome to Pooja's Blog</div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Toggle sidebar
-            const sidebarToggle = document.querySelector('.sidebar-toggle');
-            const body = document.body;
-            
-            sidebarToggle.addEventListener('click', function() {
-                body.classList.toggle('sidebar-visible');
-            });
-            
-            // Profile buttons functionality
-            document.querySelector('.profile-btn:first-child').addEventListener('click', function() {
-                alert('Edit Profile clicked');
-                // Add your edit profile functionality here
-            });
-            
-            document.querySelector('.profile-btn:last-child').addEventListener('click', function() {
-                if (confirm('Are you sure you want to delete your profile?')) {
-                    alert('Profile deletion initiated');
-                    // Add your delete profile functionality here
-                }
-            });
-            
-            // Menu item click handlers
-            document.querySelectorAll('.sidebar-menu-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    // Remove active class from all links
-                    document.querySelectorAll('.sidebar-menu-link').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                    
-                    // Add active class to clicked link
-                    this.classList.add('active');
-                    
-                    // Prevent default anchor behavior
-                    e.preventDefault();
-                    
-                    // You can add navigation logic here
-                    const linkText = this.textContent.trim();
-                    console.log(`Navigating to: ${linkText}`);
-                });
-            });
-            
-            // Show sidebar by default on larger screens
-            if (window.innerWidth > 1024) {
-                body.classList.add('sidebar-visible');
-            }
-        });
-    </script>
 </body>
 </html>
