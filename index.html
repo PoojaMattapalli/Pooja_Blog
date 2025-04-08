@@ -1,460 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pooja's Blog Canvas</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Pooja's Blog</title>
     <style>
-        * {
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-            width: 100%;
-            font-family: Arial, sans-serif;
             background-color: #f0f0f0;
-            overflow: hidden;
         }
 
-        .canvas-container {
-            width: 100vw;
-            height: 100vh;
-            background-color: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sidebar {
-            width: 300px;
-            height: 100%;
-            background-color: #f8f8f8;
-            padding: 30px;
-            border-right: 1px solid #eee;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .profile-photo {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background-color: #ddd;
-            margin-bottom: 20px;
-            display: block;
-            object-fit: cover;
-        }
-
-        .button-container {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            justify-content: center;
-            flex-wrap: nowrap;
-        }
-
-        .edit-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s;
-            background-color: #4ecdc4;
+        nav {
+            background-color: #333;
             color: white;
-        }
-
-        .edit-btn:hover {
-            background-color: #45b7b0;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .divider {
-            width: 80%;
-            height: 1px;
-            background-color: #ddd;
-            margin: 20px 0;
-        }
-
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
-        .menu-btn {
-            width: 80%;
             padding: 10px;
-            margin: 5px 0;
-            border: none;
-            border-radius: 5px;
-            background-color: #ffffff;
-            color: #333;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
-        }
-
-        .menu-btn:hover {
-            background-color: #f0f0f0;
-        }
-
-        .subcategories {
-            width: 70%;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-left: 20px;
+            justify-content: space-around;
         }
 
-        .subcategory-btn {
-            width: 100%;
-            padding: 8px;
-            margin: 3px 0;
+        nav button {
+            background-color: #4ecdc4;
             border: none;
-            border-radius: 5px;
-            background-color: #f5f5f5;
-            color: #666;
-            font-size: 14px;
+            padding: 10px 20px;
+            color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
+            border-radius: 5px;
         }
 
-        .subcategory-btn:hover {
-            background-color: #e0e0e0;
+        nav button:hover {
+            background-color: #3bb5ae;
         }
 
         .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            overflow-y: auto;
-        }
-
-        .welcome-text {
-            font-size: 72px;
-            color: #333333;
+            padding: 30px;
             text-align: center;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            line-height: 1.2;
         }
 
         .dashboard {
-            width: 100%;
-            padding: 20px;
             display: none;
             flex-direction: column;
-            gap: 20px;
+            align-items: center;
         }
 
-        .section {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .section h2 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .section textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            resize: vertical;
-            margin-bottom: 10px;
-        }
-
-        .section input[type="file"] {
-            margin-bottom: 10px;
-        }
-
-        .section img {
-            max-width: 200px;
-            max-height: 200px;
-            margin-top: 10px;
-            display: none;
-            border-radius: 5px;
-        }
-
-        .section button {
+        .create-post-btn {
             padding: 10px 20px;
             background-color: #4ecdc4;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            margin-top: 20px;
         }
 
-        .section button:hover {
-            background-color: #45b7b0;
+        .create-post-btn:hover {
+            background-color: #3bb5ae;
         }
 
-        .canvas-container::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
-            animation: rotate 20s linear infinite;
-            opacity: 0.3;
-            z-index: 0;
+        .new-post-section {
+            margin-top: 20px;
         }
 
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .new-post-section textarea {
+            width: 300px;
+            height: 100px;
+            padding: 10px;
+            border-radius: 5px;
         }
 
-        .sidebar, .main-content {
-            position: relative;
-            z-index: 1;
+        .new-post-section button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
-        @media (max-width: 1200px) {
-            .welcome-text {
-                font-size: 48px;
-            }
-            .sidebar {
-                width: 250px;
-            }
-            .profile-photo {
-                width: 150px;
-                height: 150px;
-            }
-            .edit-btn {
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
-            }
-            .menu-btn {
-                font-size: 14px;
-                padding: 8px;
-            }
-            .subcategory-btn {
-                font-size: 12px;
-                padding: 6px;
-            }
-            .dashboard {
-                padding: 15px;
-            }
-            .section textarea {
-                height: 80px;
-            }
+        .new-post-section button:hover {
+            background-color: #3bb5ae;
         }
     </style>
 </head>
+
 <body>
-    <div class="canvas-container">
-        <div class="sidebar">
-            <img src="https://via.placeholder.com/200" alt="Profile Photo" class="profile-photo" id="profilePhoto">
-            <div class="button-container">
-                <button class="edit-btn" id="editBtn" title="Edit/Add Photo"><i class="fas fa-edit"></i></button>
-            </div>
-            <div class="divider"></div>
-            <div class="sidebar-menu">
-                <button class="menu-btn" id="dashboardBtn">Dashboard</button>
-                <button class="menu-btn" id="categoriesBtn">Categories</button>
-                <div class="subcategories">
-                    <button class="subcategory-btn" id="storiesBtn">Stories</button>
-                    <button class="subcategory-btn" id="studyTipsBtn">Study Tips</button>
-                </div>
-                <div class="divider"></div>
-            </div>
-            <input type="file" accept="image/*" class="file-input" id="fileInput">
+
+    <nav>
+        <button id="homeBtn">Home</button>
+        <button id="dashboardBtn">Dashboard</button>
+    </nav>
+
+    <div class="main-content">
+        <div id="welcomeText">
+            <h1>Welcome to My Blog!</h1>
+            <p>Click Dashboard to create a new post.</p>
         </div>
-        <div class="main-content">
-            <div class="welcome-text" id="welcomeText">Welcome to Pooja's Blog</div>
-            <div class="dashboard" id="dashboard">
-                <div class="section" id="storiesSection">
-                    <h2>Stories</h2>
-                    <textarea id="storiesText" placeholder="Write your story here..."></textarea>
-                    <input type="file" accept="image/*" id="storiesImageInput">
-                    <img id="storiesImagePreview" alt="Stories Image Preview">
-                    <button id="saveStoriesBtn">Save Story</button>
-                </div>
-                <div class="section" id="everydaySection">
-                    <h2>Everyday Stories</h2>
-                    <textarea id="everydayText" placeholder="Write your everyday story here..."></textarea>
-                    <input type="file" accept="image/*" id="everydayImageInput">
-                    <img id="everydayImagePreview" alt="Everyday Stories Image Preview">
-                    <button id="saveEverydayBtn">Save Everyday Story</button>
-                </div>
-                <div class="section" id="novelsSection">
-                    <h2>Novels</h2>
-                    <textarea id="novelsText" placeholder="Write your novel here..."></textarea>
-                    <input type="file" accept="image/*" id="novelsImageInput">
-                    <img id="novelsImagePreview" alt="Novels Image Preview">
-                    <button id="saveNovelsBtn">Save Novel</button>
-                </div>
-                <div class="section" id="studyTipsSection">
-                    <h2>Study Tips</h2>
-                    <textarea id="studyTipsText" placeholder="Write your study tips here..."></textarea>
-                    <input type="file" accept="image/*" id="studyTipsImageInput">
-                    <img id="studyTipsImagePreview" alt="Study Tips Image Preview">
-                    <button id="saveStudyTipsBtn">Save Study Tip</button>
-                </div>
+
+        <div class="dashboard" id="dashboard">
+            <h1>Welcome to Pooja's Blog</h1>
+            <button class="create-post-btn" id="createPostBtn">Create New Post</button>
+
+            <div class="new-post-section" id="newPostSection" style="display:none;">
+                <h2>New Post</h2>
+                <textarea placeholder="Write your post here..." id="newPostText"></textarea><br>
+                <button id="savePostBtn">Save Post</button>
             </div>
         </div>
     </div>
 
     <script>
-        const profilePhoto = document.getElementById('profilePhoto');
-        const editBtn = document.getElementById('editBtn');
+        const homeBtn = document.getElementById('homeBtn');
         const dashboardBtn = document.getElementById('dashboardBtn');
-        const categoriesBtn = document.getElementById('categoriesBtn');
-        const storiesBtn = document.getElementById('storiesBtn');
-        const studyTipsBtn = document.getElementById('studyTipsBtn');
-        const fileInput = document.getElementById('fileInput');
         const welcomeText = document.getElementById('welcomeText');
         const dashboard = document.getElementById('dashboard');
-        const placeholderUrl = 'https://via.placeholder.com/200';
+        const createPostBtn = document.getElementById('createPostBtn');
+        const newPostSection = document.getElementById('newPostSection');
+        const savePostBtn = document.getElementById('savePostBtn');
+        const newPostText = document.getElementById('newPostText');
 
-        // Load saved profile photo from localStorage on page load
-        function loadProfilePhoto() {
-            const savedImage = localStorage.getItem('profilePhoto');
-            profilePhoto.src = savedImage ? savedImage : placeholderUrl;
-        }
-
-        window.addEventListener('load', () => {
-            loadProfilePhoto();
-            loadDashboardContent(); // Load dashboard content on page load if dashboard is visible
+        homeBtn.addEventListener('click', () => {
+            welcomeText.style.display = 'block';
+            dashboard.style.display = 'none';
         });
 
-        // Handle profile photo upload
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imageData = e.target.result;
-                    profilePhoto.src = imageData;
-                    localStorage.setItem('profilePhoto', imageData);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert('Please select a valid image file!');
-            }
-        }
-
-        editBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        fileInput.addEventListener('change', handleImageUpload);
-
-        // Show dashboard when clicking Dashboard button
         dashboardBtn.addEventListener('click', () => {
             welcomeText.style.display = 'none';
             dashboard.style.display = 'flex';
-            loadDashboardContent();
+            newPostSection.style.display = 'none';
         });
 
-        // Placeholder for Categories button
-        categoriesBtn.addEventListener('click', () => {
-            alert('Categories overview would go here!');
+        createPostBtn.addEventListener('click', () => {
+            newPostSection.style.display = 'block';
         });
 
-        // Placeholder for Stories subcategory
-        storiesBtn.addEventListener('click', () => {
-            alert('Stories section would go here!');
-        });
-
-        // Placeholder for Study Tips subcategory
-        studyTipsBtn.addEventListener('click', () => {
-            alert('Study Tips section would go here!');
-        });
-
-        // Handle image previews for dashboard sections
-        function handleSectionImageUpload(inputId, previewId) {
-            const input = document.getElementById(inputId);
-            const preview = document.getElementById(previewId);
-            input.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        preview.style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    alert('Please select a valid image file!');
-                }
-            });
-        }
-
-        handleSectionImageUpload('storiesImageInput', 'storiesImagePreview');
-        handleSectionImageUpload('everydayImageInput', 'everydayImagePreview');
-        handleSectionImageUpload('novelsImageInput', 'novelsImagePreview');
-        handleSectionImageUpload('studyTipsImageInput', 'studyTipsImagePreview');
-
-        // Save content to localStorage
-        function saveContent(section) {
-            const text = document.getElementById(`${section}Text`).value;
-            const imagePreview = document.getElementById(`${section}ImagePreview`);
-            const image = imagePreview.style.display === 'block' ? imagePreview.src : null;
-
-            localStorage.setItem(`${section}Text`, text);
-            if (image) {
-                localStorage.setItem(`${section}Image`, image);
+        savePostBtn.addEventListener('click', () => {
+            const postContent = newPostText.value;
+            if (postContent.trim() === "") {
+                alert("Post cannot be empty!");
             } else {
-                localStorage.removeItem(`${section}Image`);
+                alert("Post saved successfully: " + postContent);
+                newPostText.value = "";
+                newPostSection.style.display = 'none';
             }
-            alert(`${section.charAt(0).toUpperCase() + section.slice(1)} saved successfully!`);
-        }
-
-        // Load saved content from localStorage
-        function loadDashboardContent() {
-            const sections = ['stories', 'everyday', 'novels', 'studyTips'];
-            sections.forEach(section => {
-                const text = localStorage.getItem(`${section}Text`);
-                const image = localStorage.getItem(`${section}Image`);
-                const textarea = document.getElementById(`${section}Text`);
-                const imagePreview = document.getElementById(`${section}ImagePreview`);
-
-                if (text) textarea.value = text;
-                if (image) {
-                    imagePreview.src = image;
-                    imagePreview.style.display = 'block';
-                } else {
-                    imagePreview.style.display = 'none';
-                }
-            });
-        }
-
-        // Attach save event listeners
-        document.getElementById('saveStoriesBtn').addEventListener('click', () => saveContent('stories'));
-        document.getElementById('saveEverydayBtn').addEventListener('click', () => saveContent('everyday'));
-        document.getElementById('saveNovelsBtn').addEventListener('click', () => saveContent('novels'));
-        document.getElementById('saveStudyTipsBtn').addEventListener('click', () => saveContent('studyTips'));
+        });
     </script>
+
 </body>
+
 </html>
