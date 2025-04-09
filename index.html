@@ -166,79 +166,194 @@
             padding: 20px;
             display: none;
             flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .dashboard-header {
+            font-size: 48px;
+            color: #333333;
+            text-align: center;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-options {
+            display: flex;
             gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        .section {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .section h2 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .section textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            resize: vertical;
-            margin-bottom: 10px;
-        }
-
-        .section input[type="file"] {
-            margin-bottom: 10px;
-        }
-
-        .section img {
-            max-width: 200px;
-            max-height: 200px;
-            margin-top: 10px;
-            display: none;
-            border-radius: 5px;
-        }
-
-        .section button {
-            padding: 10px 20px;
+        .dashboard-btn {
+            padding: 15px 30px;
             background-color: #4ecdc4;
             color: white;
             border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-btn:hover {
+            background-color: #45b7b0;
+            transform: scale(1.05);
+        }
+
+        .dashboard-btn i {
+            font-size: 20px;
+        }
+
+        .views-count {
+            padding: 15px 30px;
+            background-color: #f9f9f9;
+            color: #333;
+            border: 2px solid #4ecdc4;
+            border-radius: 8px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .recent-posts {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 800px;
+        }
+
+        .recent-post-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .recent-post-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .recent-post-title {
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .recent-post-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .recent-post-btn {
+            padding: 5px 10px;
+            border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 14px;
             transition: background-color 0.3s;
         }
 
-        .section button:hover {
+        .edit-post-btn {
+            background-color: #4ecdc4;
+            color: white;
+        }
+
+        .edit-post-btn:hover {
             background-color: #45b7b0;
         }
 
-        .canvas-container::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
-            animation: rotate 20s linear infinite;
-            opacity: 0.3;
-            z-index: 0;
+        .delete-post-btn {
+            background-color: #ff6b6b;
+            color: white;
         }
 
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .delete-post-btn:hover {
+            background-color: #ff5252;
         }
 
-        .sidebar, .main-content {
-            position: relative;
-            z-index: 1;
+        .posts-container {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
         }
 
-         /* New Post Modal Styles */
+        .post-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .post-image {
+            width: 100%;
+            height: 200px;
+            background-color: #eee;
+            object-fit: cover;
+        }
+
+        .post-content {
+            padding: 20px;
+        }
+
+        .post-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .post-category {
+            display: inline-block;
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .post-text {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .post-date {
+            font-size: 12px;
+            color: #999;
+        }
+
         .new-post-btn {
             position: fixed;
             bottom: 30px;
@@ -380,105 +495,13 @@
             background-color: #d0d0d0;
         }
 
-        .publish-btn {
+        .publish-btn, .update-btn {
             background-color: #4ecdc4;
             color: white;
         }
 
-        .publish-btn:hover {
+        .publish-btn:hover, .update-btn:hover {
             background-color: #45b7b0;
-        }
-
-        .posts-container {
-            width: 100%;
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .post-card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        
-         .post-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .post-image {
-            width: 100%;
-            height: 200px;
-            background-color: #eee;
-            object-fit: cover;
-        }
-
-        .post-content {
-            padding: 20px;
-        }
-
-        .post-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .post-category {
-            display: inline-block;
-            background-color: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .post-text {
-            color: #555;
-            margin-bottom: 15px;
-            line-height: 1.5;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-        }
-
-        .post-date {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .add-post-btn {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 2px dashed #4ecdc4;
-            border-radius: 8px;
-            background-color: rgba(78, 205, 196, 0.1);
-            color: #4ecdc4;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s;
-        }
-
-        .add-post-btn:hover {
-            background-color: rgba(78, 205, 196, 0.2);
-        }
-
-        .add-post-btn i {
-            margin-right: 10px;
-            font-size: 20px;
         }
 
         @media (max-width: 1200px) {
@@ -505,11 +528,19 @@
                 font-size: 12px;
                 padding: 6px;
             }
-            .dashboard {
-                padding: 15px;
+            .dashboard-header {
+                font-size: 36px;
             }
-            .section textarea {
-                height: 80px;
+            .dashboard-btn, .views-count {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            .recent-post-title {
+                font-size: 14px;
+            }
+            .recent-post-btn {
+                padding: 4px 8px;
+                font-size: 12px;
             }
             .new-post-btn {
                 width: 50px;
@@ -547,63 +578,35 @@
         </div>
         <div class="main-content">
             <div class="welcome-text" id="welcomeText">Welcome to Pooja's Blog</div>
-            
-            <!-- Dashboard View -->
             <div class="dashboard" id="dashboard">
-                <div class="section" id="storiesSection">
-                    <h2>Stories</h2>
-                    <textarea id="storiesText" placeholder="Write your story here..."></textarea>
-                    <input type="file" accept="image/*" id="storiesImageInput">
-                    <img id="storiesImagePreview" alt="Stories Image Preview">
-                    <button id="saveStoriesBtn">Save Story</button>
+                <div class="dashboard-header">Welcome to Pooja's Blog</div>
+                <div class="dashboard-options">
+                    <button class="dashboard-btn" id="createPostBtn"><i class="fas fa-plus-circle"></i> Create New Post</button>
+                    <button class="dashboard-btn" id="viewPostsBtn"><i class="fas fa-eye"></i> View Posts</button>
+                    <div class="views-count"><i class="fas fa-chart-line"></i> Number of Views: <span id="viewsCount">0</span></div>
                 </div>
-                <div class="section" id="everydaySection">
-                    <h2>Everyday Stories</h2>
-                    <textarea id="everydayText" placeholder="Write your everyday story here..."></textarea>
-                    <input type="file" accept="image/*" id="everydayImageInput">
-                    <img id="everydayImagePreview" alt="Everyday Stories Image Preview">
-                    <button id="saveEverydayBtn">Save Everyday Story</button>
-                </div>
-                <div class="section" id="novelsSection">
-                    <h2>Novels</h2>
-                    <textarea id="novelsText" placeholder="Write your novel here..."></textarea>
-                    <input type="file" accept="image/*" id="novelsImageInput">
-                    <img id="novelsImagePreview" alt="Novels Image Preview">
-                    <button id="saveNovelsBtn">Save Novel</button>
-                </div>
-                <div class="section" id="studyTipsSection">
-                    <h2>Study Tips</h2>
-                    <textarea id="studyTipsText" placeholder="Write your study tips here..."></textarea>
-                    <input type="file" accept="image/*" id="studyTipsImageInput">
-                    <img id="studyTipsImagePreview" alt="Study Tips Image Preview">
-                    <button id="saveStudyTipsBtn">Save Study Tip</button>
-                </div>
+                <div class="recent-posts" id="recentPosts"></div>
             </div>
-            
-            <!-- Posts View -->
             <div class="posts-container" id="postsContainer">
-                <button class="add-post-btn" id="addPostFromList">
-                    <i class="fas fa-plus-circle"></i> Create New Post
-                </button>
                 <!-- Posts will be dynamically added here -->
             </div>
         </div>
     </div>
-    
+
     <!-- New Post Button -->
     <button class="new-post-btn" id="newPostBtn">
         <i class="fas fa-plus"></i>
     </button>
-    
-    <!-- New Post Modal -->
+
+    <!-- New Post/Edit Modal -->
     <div class="modal" id="newPostModal">
         <div class="modal-content">
-            <span class="close-modal" id="closeModal">&times;</span>
-            <h2>Create New Post</h2>
+            <span class="close-modal" id="closeModal">×</span>
+            <h2 id="modalTitle">Create New Post</h2>
             <form id="newPostForm">
+                <input type="hidden" id="postId">
                 <label for="postTitle">Title</label>
                 <input type="text" id="postTitle" placeholder="Enter post title" required>
-                
                 <label for="postCategory">Category</label>
                 <select id="postCategory" required>
                     <option value="">Select a category</option>
@@ -612,17 +615,15 @@
                     <option value="novels">Novels</option>
                     <option value="studyTips">Study Tips</option>
                 </select>
-                
                 <label for="postContent">Content</label>
                 <textarea id="postContent" placeholder="Write your post content here..." required></textarea>
-                
                 <label for="postImage">Image (optional)</label>
                 <input type="file" id="postImage" accept="image/*">
                 <img id="postImagePreview" class="image-preview" alt="Post Image Preview">
-                
                 <div class="button-row">
                     <button type="button" class="cancel-btn" id="cancelPost">Cancel</button>
-                    <button type="submit" class="publish-btn">Publish Post</button>
+                    <button type="submit" class="publish-btn" id="publishBtn">Publish Post</button>
+                    <button type="button" class="update-btn" id="updateBtn" style="display: none;">Update Post</button>
                 </div>
             </form>
         </div>
@@ -640,27 +641,33 @@
         const welcomeText = document.getElementById('welcomeText');
         const dashboard = document.getElementById('dashboard');
         const postsContainer = document.getElementById('postsContainer');
+        const recentPosts = document.getElementById('recentPosts');
         const newPostBtn = document.getElementById('newPostBtn');
+        const createPostBtn = document.getElementById('createPostBtn');
+        const viewPostsBtn = document.getElementById('viewPostsBtn');
+        const viewsCount = document.getElementById('viewsCount');
         const newPostModal = document.getElementById('newPostModal');
         const closeModal = document.getElementById('closeModal');
         const cancelPost = document.getElementById('cancelPost');
-        const addPostFromList = document.getElementById('addPostFromList');
         const newPostForm = document.getElementById('newPostForm');
         const postImage = document.getElementById('postImage');
         const postImagePreview = document.getElementById('postImagePreview');
+        const modalTitle = document.getElementById('modalTitle');
+        const publishBtn = document.getElementById('publishBtn');
+        const updateBtn = document.getElementById('updateBtn');
+        const postIdInput = document.getElementById('postId');
         const placeholderUrl = 'https://via.placeholder.com/200';
 
-        // Load saved profile photo from localStorage on page load
-        function loadProfilePhoto() {
+        // Load initial data from localStorage
+        function loadInitialData() {
             const savedImage = localStorage.getItem('profilePhoto');
             profilePhoto.src = savedImage ? savedImage : placeholderUrl;
+            const savedViews = localStorage.getItem('viewsCount') || '0';
+            viewsCount.textContent = savedViews;
+            loadRecentPosts();
         }
 
-        window.addEventListener('load', () => {
-            loadProfilePhoto();
-            loadDashboardContent(); // Load dashboard content on page load if dashboard is visible
-            loadPosts(); // Load posts on page load
-        });
+        window.addEventListener('load', loadInitialData);
 
         // Handle profile photo upload
         function handleImageUpload(event) {
@@ -678,117 +685,63 @@
             }
         }
 
-        editBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
-
+        editBtn.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', handleImageUpload);
 
-        // Show dashboard when clicking Dashboard button
+        // Navigation between views
         dashboardBtn.addEventListener('click', () => {
             welcomeText.style.display = 'none';
             dashboard.style.display = 'flex';
             postsContainer.style.display = 'none';
-            loadDashboardContent();
+            loadRecentPosts();
         });
 
-        // Show posts when clicking Posts button
         postsBtn.addEventListener('click', () => {
             welcomeText.style.display = 'none';
             dashboard.style.display = 'none';
             postsContainer.style.display = 'flex';
             loadPosts();
+            incrementViews();
         });
 
-        // Placeholder for Categories button
         categoriesBtn.addEventListener('click', () => {
             alert('Categories overview would go here!');
         });
 
-        // Placeholder for Stories subcategory
         storiesBtn.addEventListener('click', () => {
             alert('Stories section would go here!');
         });
 
-        // Placeholder for Study Tips subcategory
         studyTipsBtn.addEventListener('click', () => {
             alert('Study Tips section would go here!');
         });
 
-        // Handle image previews for dashboard sections
-        function handleSectionImageUpload(inputId, previewId) {
-            const input = document.getElementById(inputId);
-            const preview = document.getElementById(previewId);
-            input.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        preview.style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    alert('Please select a valid image file!');
-                }
-            });
-        }
-
-        handleSectionImageUpload('storiesImageInput', 'storiesImagePreview');
-        handleSectionImageUpload('everydayImageInput', 'everydayImagePreview');
-        handleSectionImageUpload('novelsImageInput', 'novelsImagePreview');
-        handleSectionImageUpload('studyTipsImageInput', 'studyTipsImagePreview');
-
-        // Save content to localStorage
-        function saveContent(section) {
-            const text = document.getElementById(`${section}Text`).value;
-            const imagePreview = document.getElementById(`${section}ImagePreview`);
-            const image = imagePreview.style.display === 'block' ? imagePreview.src : null;
-
-            localStorage.setItem(`${section}Text`, text);
-            if (image) {
-                localStorage.setItem(`${section}Image`, image);
-            } else {
-                localStorage.removeItem(`${section}Image`);
-            }
-            alert(`${section.charAt(0).toUpperCase() + section.slice(1)} saved successfully!`);
-        }
-
-        // Load saved content from localStorage
-        function loadDashboardContent() {
-            const sections = ['stories', 'everyday', 'novels', 'studyTips'];
-            sections.forEach(section => {
-                const text = localStorage.getItem(`${section}Text`);
-                const image = localStorage.getItem(`${section}Image`);
-                const textarea = document.getElementById(`${section}Text`);
-                const imagePreview = document.getElementById(`${section}ImagePreview`);
-
-                if (text) textarea.value = text;
-                if (image) {
-                    imagePreview.src = image;
-                    imagePreview.style.display = 'block';
-                } else {
-                    imagePreview.style.display = 'none';
-                }
-            });
-        }
-
-        // Attach save event listeners
-        document.getElementById('saveStoriesBtn').addEventListener('click', () => saveContent('stories'));
-        document.getElementById('saveEverydayBtn').addEventListener('click', () => saveContent('everyday'));
-        document.getElementById('saveNovelsBtn').addEventListener('click', () => saveContent('novels'));
-        document.getElementById('saveStudyTipsBtn').addEventListener('click', () => saveContent('studyTips'));
+        // Dashboard button actions
+        createPostBtn.addEventListener('click', openNewPostModal);
+        viewPostsBtn.addEventListener('click', () => {
+            welcomeText.style.display = 'none';
+            dashboard.style.display = 'none';
+            postsContainer.style.display = 'flex';
+            loadPosts();
+            incrementViews();
+        });
 
         // New Post Modal Functions
         newPostBtn.addEventListener('click', openNewPostModal);
-        addPostFromList.addEventListener('click', openNewPostModal);
-        closeModal.addEventListener('click', closeNewPostModal);
-        cancelPost.addEventListener('click', closeNewPostModal);
 
         function openNewPostModal() {
+            modalTitle.textContent = 'Create New Post';
+            publishBtn.style.display = 'block';
+            updateBtn.style.display = 'none';
+            newPostForm.reset();
+            postImagePreview.style.display = 'none';
+            postIdInput.value = '';
             newPostModal.style.display = 'flex';
             document.getElementById('postTitle').focus();
         }
+
+        closeModal.addEventListener('click', closeNewPostModal);
+        cancelPost.addEventListener('click', closeNewPostModal);
 
         function closeNewPostModal() {
             newPostModal.style.display = 'none';
@@ -797,12 +750,13 @@
         }
 
         // Handle post image preview
-        postImage.addEventListener('change', function() {
-            const file = this.files[0];
+        postImage.addEventListener('change', function(event) {
+            const file = event.target.files[0];
             if (file && file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    postImagePreview.src = e.target.result;
+                    const imageData = e.target.result;
+                    postImagePreview.src = imageData;
                     postImagePreview.style.display = 'block';
                 };
                 reader.readAsDataURL(file);
@@ -814,7 +768,9 @@
         // Submit new post
         newPostForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+            console.log("Form submitted!"); // Debug: Check if the form submission is triggered
+
+            const id = postIdInput.value;
             const title = document.getElementById('postTitle').value;
             const category = document.getElementById('postCategory').value;
             const content = document.getElementById('postContent').value;
@@ -825,60 +781,56 @@
                 month: 'long',
                 day: 'numeric'
             });
-            
-            // Get existing posts or create new array
+
             const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            
-            // Add new post
-            posts.push({
-                id: Date.now().toString(),
-                title,
-                category,
-                content,
-                image,
-                date
-            });
-            
-            // Save back to localStorage
-            localStorage.setItem('blogPosts', JSON.stringify(posts));
-            
-            // Close modal and reload posts
+            console.log("Current posts before saving:", posts); // Debug: Check existing posts
+
+            if (id) {
+                // Update existing post
+                const postIndex = posts.findIndex(post => post.id === id);
+                posts[postIndex] = { id, title, category, content, image, date: posts[postIndex].date };
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                alert('Post updated successfully!');
+            } else {
+                // Create new post
+                const newPost = { id: Date.now().toString(), title, category, content, image, date };
+                posts.push(newPost);
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                console.log("New post added:", newPost); // Debug: Confirm the new post
+                console.log("Updated posts in localStorage:", JSON.parse(localStorage.getItem('blogPosts'))); // Debug: Check localStorage
+                alert('Post published successfully!');
+            }
+
             closeNewPostModal();
-            loadPosts();
-            alert('Post published successfully!');
+            loadPosts(); // Refresh the "All Posts" section
+            loadRecentPosts(); // Refresh the recent posts on the dashboard
         });
 
-        // Load posts from localStorage
+        // Load all posts
         function loadPosts() {
-            // Clear existing posts except the "Add Post" button
             const postElements = postsContainer.querySelectorAll('.post-card');
             postElements.forEach(post => post.remove());
-            
-            // Get posts from localStorage
+
             const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            
+            console.log("Loading posts for All Posts section:", posts); // Debug: Check posts being loaded
+
             if (posts.length === 0) {
-                // Add a message if no posts exist
                 const noPostsMsg = document.createElement('div');
                 noPostsMsg.className = 'post-card';
                 noPostsMsg.innerHTML = `
                     <div class="post-content">
                         <div class="post-title">No Posts Yet</div>
-                        <div class="post-text">Create your first post by clicking the "Create New Post" button above.</div>
+                        <div class="post-text">Create your first post from the Dashboard or the + button.</div>
                     </div>
                 `;
                 postsContainer.appendChild(noPostsMsg);
                 return;
             }
-            
-            // Sort posts by date (most recent first)
+
             posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            // Add posts to container
             posts.forEach(post => {
                 const postEl = document.createElement('div');
                 postEl.className = 'post-card';
-                
                 postEl.innerHTML = `
                     ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image">` : ''}
                     <div class="post-content">
@@ -888,9 +840,89 @@
                         <div class="post-date">${post.date}</div>
                     </div>
                 `;
-                
                 postsContainer.appendChild(postEl);
             });
+        }
+
+        // Load up to 6 recent posts in dashboard
+        function loadRecentPosts() {
+            recentPosts.innerHTML = '';
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            console.log("Loading recent posts for Dashboard:", posts); // Debug: Check posts being loaded for recent posts
+
+            posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+            const recent = posts.slice(0, 6);
+
+            if (recent.length === 0) {
+                const noPostsMsg = document.createElement('div');
+                noPostsMsg.className = 'recent-post-card';
+                noPostsMsg.innerHTML = `
+                    <span class="recent-post-title">No recent posts yet</span>
+                    <span>Create one now!</span>
+                `;
+                recentPosts.appendChild(noPostsMsg);
+                return;
+            }
+
+            recent.forEach(post => {
+                const postEl = document.createElement('div');
+                postEl.className = "recent-post-card";
+                postEl.innerHTML = `
+                    <span class="recent-post-title">${post.title}</span>
+                    <div class="recent-post-actions">
+                        <button class="recent-post-btn edit-post-btn" data-id="${post.id}">Edit</button>
+                        <button class="recent-post-btn delete-post-btn" data-id="${post.id}">Delete</button>
+                    </div>
+                `;
+                recentPosts.appendChild(postEl);
+
+                postEl.querySelector('.edit-post-btn').addEventListener('click', () => editPost(post.id));
+                postEl.querySelector('.delete-post-btn').addEventListener('click', () => deletePost(post.id));
+            });
+        }
+
+        // Edit post
+        function editPost(id) {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const post = posts.find(p => p.id === id);
+            if (!post) return;
+
+            modalTitle.textContent = 'Edit Post';
+            publishBtn.style.display = 'none';
+            updateBtn.style.display = 'block';
+            postIdInput.value = post.id;
+            document.getElementById('postTitle').value = post.title;
+            document.getElementById('postCategory').value = post.category;
+            document.getElementById('postContent').value = post.content;
+            if (post.image) {
+                postImagePreview.src = post.image;
+                postImagePreview.style.display = 'block';
+            } else {
+                postImagePreview.style.display = 'none';
+            }
+            newPostModal.style.display = 'flex';
+        }
+
+        // Delete post
+        function deletePost(id) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+                const updatedPosts = posts.filter(p => p.id !== id);
+                localStorage.setItem('blogPosts', JSON.stringify(updatedPosts));
+                loadPosts();
+                loadRecentPosts();
+                alert('Post deleted successfully!');
+            }
+        }
+
+        updateBtn.addEventListener('click', () => newPostForm.dispatchEvent(new Event('submit')));
+
+        // Increment and save views count
+        function incrementViews() {
+            let views = parseInt(localStorage.getItem('viewsCount')) || 0;
+            views++;
+            localStorage.setItem('viewsCount', views);
+            viewsCount.textContent = views;
         }
 
         // Helper function to get category display name
