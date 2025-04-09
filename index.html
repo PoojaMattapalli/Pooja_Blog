@@ -295,6 +295,7 @@
             flex-direction: column;
             gap: 20px;
             padding: 20px;
+            align-items: center;
         }
 
         .post-card {
@@ -303,6 +304,10 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
         }
 
         .post-card:hover {
@@ -319,6 +324,7 @@
 
         .post-content {
             padding: 20px;
+            flex: 1;
         }
 
         .post-title {
@@ -352,6 +358,22 @@
         .post-date {
             font-size: 12px;
             color: #999;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px 20px 20px;
+            justify-content: flex-end;
+        }
+
+        .post-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
         }
 
         .new-post-btn {
@@ -576,6 +598,9 @@
                 width: 90%;
                 padding: 20px;
             }
+            .post-card {
+                max-width: 600px;
+            }
         }
     </style>
 </head>
@@ -789,7 +814,7 @@
             newPostForm.reset();
             postImagePreview.style.display = 'none';
             postIdInput.value = '';
-            loadCategories(); // Load categories when opening the modal
+            loadCategories();
             newPostModal.style.display = 'flex';
             document.getElementById('postTitle').focus();
         }
@@ -887,7 +912,7 @@
             loadRecentPosts();
         });
 
-        // Load all posts
+        // Load all posts in a vertical grid
         function loadPosts() {
             const postElements = postsContainer.querySelectorAll('.post-card');
             postElements.forEach(post => post.remove());
@@ -919,8 +944,15 @@
                         <div class="post-text">${post.content}</div>
                         <div class="post-date">${post.date}</div>
                     </div>
+                    <div class="post-actions">
+                        <button class="post-btn edit-post-btn" data-id="${post.id}">Edit</button>
+                        <button class="post-btn delete-post-btn" data-id="${post.id}">Delete</button>
+                    </div>
                 `;
                 postsContainer.appendChild(postEl);
+
+                postEl.querySelector('.edit-post-btn').addEventListener('click', () => editPost(post.id));
+                postEl.querySelector('.delete-post-btn').addEventListener('click', () => deletePost(post.id));
             });
         }
 
