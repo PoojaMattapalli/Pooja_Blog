@@ -456,7 +456,8 @@
             color: #555;
         }
 
-        .modal input[type="text"] {
+        .modal input[type="text"],
+        .modal input[type="date"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -526,11 +527,16 @@
             background-color: #45b7b0;
         }
 
-        .add-category-btn {
+        .category-actions {
+            display: flex;
+            gap: 10px;
             margin-top: 10px;
+        }
+
+        .add-category-btn,
+        .edit-category-btn,
+        .delete-category-btn {
             padding: 8px 16px;
-            background-color: #ff6b6b;
-            color: white;
             border: none;
             border-radius: 5px;
             font-size: 14px;
@@ -541,11 +547,36 @@
             transition: background-color 0.3s;
         }
 
+        .add-category-btn {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
         .add-category-btn:hover {
             background-color: #ff5252;
         }
 
-        .add-category-btn i {
+        .edit-category-btn {
+            background-color: #4ecdc4;
+            color: white;
+        }
+
+        .edit-category-btn:hover {
+            background-color: #45b7b0;
+        }
+
+        .delete-category-btn {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .delete-category-btn:hover {
+            background-color: #ff5252;
+        }
+
+        .add-category-btn i,
+        .edit-category-btn i,
+        .delete-category-btn i {
             font-size: 16px;
         }
 
@@ -655,6 +686,8 @@
                 <input type="hidden" id="postId">
                 <label for="postTitle">Title</label>
                 <input type="text" id="postTitle" placeholder="Enter post title" required>
+                <label for="postDate">Date</label>
+                <input type="date" id="postDate" required>
                 <label for="postCategory">Category</label>
                 <select id="postCategory" required>
                     <option value="">Select a category</option>
@@ -663,10 +696,17 @@
                     <option value="novels">Novels</option>
                     <option value="studyTips">Study Tips</option>
                 </select>
-                <!-- Add Category Button -->
-                <button type="button" class="add-category-btn" id="addCategoryBtn">
-                    <i class="fas fa-plus"></i> Add New Category
-                </button>
+                <div class="category-actions">
+                    <button type="button" class="add-category-btn" id="addCategoryBtn">
+                        <i class="fas fa-plus"></i> Add New Category
+                    </button>
+                    <button type="button" class="edit-category-btn" id="editCategoryBtn">
+                        <i class="fas fa-edit"></i> Edit Category
+                    </button>
+                    <button type="button" class="delete-category-btn" id="deleteCategoryBtn">
+                        <i class="fas fa-trash"></i> Delete Category
+                    </button>
+                </div>
                 <label for="postContent">Content</label>
                 <textarea id="postContent" placeholder="Write your post content here..." required></textarea>
                 <label for="postImage">Image (optional)</label>
@@ -709,6 +749,8 @@
         const updateBtn = document.getElementById('updateBtn');
         const postIdInput = document.getElementById('postId');
         const addCategoryBtn = document.getElementById('addCategoryBtn');
+        const editCategoryBtn = document.getElementById('editCategoryBtn');
+        const deleteCategoryBtn = document.getElementById('deleteCategoryBtn');
         const placeholderUrl = 'https://via.placeholder.com/200';
 
         // Load initial data from localStorage
@@ -814,6 +856,7 @@
             newPostForm.reset();
             postImagePreview.style.display = 'none';
             postIdInput.value = '';
+            document.getElementById('postDate').value = new Date().toISOString().split('T')[0]; // Set default date to today
             loadCategories();
             newPostModal.style.display = 'flex';
             document.getElementById('postTitle').focus();
@@ -876,16 +919,93 @@
             }
         });
 
+        // Edit category
+        editCategoryBtn.addEventListener('click', () => {
+            const categorySelect = document.getElementById('postCategory');
+            const selectedCategory = categorySelect.value;
+            if (!selectedCategory) {
+                alert('Please select a category to edit!');
+                return;
+            }
+
+            const newCategoryName = prompt('Enter the new name for this category:', categorySelect.options[categorySelect.selectedIndex].text);
+            if (newCategoryName && newCategoryName.trim() !== '') {
+                const newCategoryValue = newCategoryName.toLowerCase().replace(/\s+/g, '');
+                const existingOptions = Array.from(categorySelect.options).map(option => option.value);
+                if (existingOptions.includes(newCategoryValue) && newCategoryValue !== selectedCategory) {
+                    alert('A category with this name already exists!');
+                    return;
+                }
+
+                // Update category in localStorage
+                const savedCategories = JSON.parse(localStorage.getItem('blogCategories')) || [];
+                const categoryIndex = savedCategories.findIndex(cat => cat.value === selectedCategory);
+                if (categoryIndex !== -1) {
+                    savedCategories[categoryIndex] = { value: newCategoryValue, name: newCategoryName };
+                    localStorage.setItem('blogCategories', JSON.stringify(savedCategories));
+
+                    // Update posts with the new category value
+                    const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+                    posts.forEach(post => {
+                        if (post.category === selectedCategory) {
+                            post.category = newCategoryValue;
+                        }
+                    });
+                    localStorage.setItem('blogPosts', JSON.stringify(posts));
+
+                    // Reload categories and posts
+                    loadCategories();
+                    categorySelect.value = newCategoryValue;
+                    loadPosts();
+                    loadRecentPosts();
+                }
+            } else {
+                alert('Please enter a valid category name!');
+            }
+        });
+
+        // Delete category
+        deleteCategoryBtn.addEventListener('click', () => {
+            const categorySelect = document.getElementById('postCategory');
+            const selectedCategory = categorySelect.value;
+            if (!selectedCategory) {
+                alert('Please select a category to delete!');
+                return;
+            }
+
+            // Check if any posts are using this category
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const isCategoryUsed = posts.some(post => post.category === selectedCategory);
+            if (isCategoryUsed) {
+                alert('Cannot delete this category because it is being used by one or more posts!');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to delete the category "${categorySelect.options[categorySelect.selectedIndex].text}"?`)) {
+                // Remove category from localStorage
+                const savedCategories = JSON.parse(localStorage.getItem('blogCategories')) || [];
+                const updatedCategories = savedCategories.filter(cat => cat.value !== selectedCategory);
+                localStorage.setItem('blogCategories', JSON.stringify(updatedCategories));
+
+                // Reload categories
+                loadCategories();
+                categorySelect.value = '';
+            }
+        });
+
         // Submit new post
         newPostForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const id = postIdInput.value;
             const title = document.getElementById('postTitle').value;
+            const date = document.getElementById('postDate').value;
             const category = document.getElementById('postCategory').value;
             const content = document.getElementById('postContent').value;
             const imagePreview = document.getElementById('postImagePreview');
             const image = imagePreview.style.display === 'block' ? imagePreview.src : null;
-            const date = new Date().toLocaleDateString('en-US', {
+
+            // Format the date
+            const formattedDate = new Date(date).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
@@ -896,12 +1016,12 @@
             if (id) {
                 // Update existing post
                 const postIndex = posts.findIndex(post => post.id === id);
-                posts[postIndex] = { id, title, category, content, image, date: posts[postIndex].date };
+                posts[postIndex] = { id, title, date: formattedDate, category, content, image };
                 localStorage.setItem('blogPosts', JSON.stringify(posts));
                 alert('Post updated successfully!');
             } else {
                 // Create new post
-                const newPost = { id: Date.now().toString(), title, category, content, image, date };
+                const newPost = { id: Date.now().toString(), title, date: formattedDate, category, content, image };
                 posts.push(newPost);
                 localStorage.setItem('blogPosts', JSON.stringify(posts));
                 alert('Post published successfully!');
@@ -1003,6 +1123,13 @@
             updateBtn.style.display = 'block';
             postIdInput.value = post.id;
             document.getElementById('postTitle').value = post.title;
+            // Convert the formatted date back to YYYY-MM-DD for the input
+            const dateParts = post.date.split(' ');
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const month = monthNames.indexOf(dateParts[0]).toString().padStart(2, '0');
+            const day = dateParts[1].replace(',', '').padStart(2, '0');
+            const year = dateParts[2];
+            document.getElementById('postDate').value = `${year}-${month}-${day}`;
             loadCategories();
             document.getElementById('postCategory').value = post.category;
             document.getElementById('postContent').value = post.content;
