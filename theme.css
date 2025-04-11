@@ -1,0 +1,138 @@
+/* 
+ * Custom Theme Colors for Pooja's Blog
+ * Light pink/beige color scheme
+ */
+
+:root {
+  --background-color: #efe1e1;
+  --accent-color: #f0d2da;
+  --sidebar-color: #f0d2da;
+  --text-color: #5a4444;
+  --heading-color: #7a5656;
+  --button-color: #d4a5b4;
+  --button-hover-color: #c394a3;
+  --card-bg-color: #ffffff;
+  --card-border-color: #e9cdcd;
+  --modal-bg-color: #ffffff;
+  --sidebar-text-color: #5a4444;
+  --sidebar-link-color: #7a5656;
+  --sidebar-link-hover-color: #453333;
+}
+
+/* Main Layout */
+body {
+  background-color: var(--background-color);
+}
+
+.sidebar {
+  background-color: var(--sidebar-color);
+  border-right: 1px solid var(--card-border-color);
+}
+
+.main-content {
+  color: var(--text-color);
+}
+
+/* Headers and text */
+h1, h2, h3, h4, h5, h6, .form-title, .modal-title, .post-title {
+  color: var(--heading-color);
+}
+
+/* Buttons */
+.create-button, .btn-primary {
+  background-color: var(--button-color);
+  border: none;
+}
+
+.create-button:hover, .btn-primary:hover {
+  background-color: var(--button-hover-color);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--text-color);
+  border: 1px solid var(--card-border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--background-color);
+}
+
+/* Blog Post Cards */
+.post, .post-form, .empty-state, header {
+  background-color: var(--card-bg-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid var(--card-border-color);
+}
+
+/* Modals */
+.modal {
+  background-color: var(--modal-bg-color);
+  border: 1px solid var(--card-border-color);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--card-border-color);
+}
+
+.modal-footer {
+  border-top: 1px solid var(--card-border-color);
+}
+
+/* Form controls */
+.form-control {
+  border: 1px solid var(--card-border-color);
+  color: var(--text-color);
+}
+
+.form-control:focus {
+  border-color: var(--button-color);
+  box-shadow: 0 0 0 0.2rem rgba(208, 165, 180, 0.25);
+}
+
+/* Sidebar specific styles */
+.sidebar h2, 
+.sidebar .profile-name {
+  color: var(--sidebar-text-color);
+}
+
+.sidebar p,
+.sidebar .profile-tagline {
+  color: var(--sidebar-text-color);
+}
+
+.sidebar a {
+  color: var(--sidebar-link-color);
+}
+
+.sidebar a:hover {
+  color: var(--sidebar-link-hover-color);
+}
+
+#profile-container {
+  border-color: var(--card-border-color);
+}
+
+/* Post action buttons */
+.post-btn.view {
+  color: var(--button-color);
+}
+
+.post-btn.edit {
+  color: var(--button-color);
+}
+
+.post-btn.delete {
+  color: #ef4444; /* Keep delete button red for warning */
+}
+
+/* Upload buttons */
+.upload-label {
+  background-color: white;
+  border: 1px solid var(--card-border-color);
+  color: var(--text-color);
+}
+
+.upload-label:hover {
+  background-color: var(--background-color);
+}
