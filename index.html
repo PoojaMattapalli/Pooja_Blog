@@ -17,9 +17,68 @@
       background-color: #f7f7f7;
       color: #333;
       line-height: 1.6;
-      padding: 20px;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      min-height: 100vh;
     }
     
+    /* Layout */
+    .sidebar {
+      width: 250px;
+      background-color: #6b46c1;
+      color: white;
+      min-height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+    
+    .main-content {
+      flex: 1;
+      margin-left: 250px;
+      padding: 20px;
+      width: calc(100% - 250px);
+    }
+    
+    /* Responsive sidebar */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+      }
+      
+      .toggle-sidebar {
+        display: block !important;
+      }
+    }
+    
+    .toggle-sidebar {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #6b46c1;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px;
+      z-index: 101;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    
+    /* Container */
     .container {
       max-width: 800px;
       margin: 0 auto;
@@ -391,8 +450,19 @@
   </style>
 </head>
 <body>
-  <div class="container" id="app">
-    <!-- Content will be rendered here by JavaScript -->
+  <!-- Sidebar Toggle Button (Mobile Only) -->
+  <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
+  
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <!-- Sidebar content will be loaded from sidebar.js -->
+  </div>
+  
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container" id="app">
+      <!-- Content will be rendered here by JavaScript -->
+    </div>
   </div>
 
   <script>
@@ -722,6 +792,12 @@
         .replace(/'/g, "&#039;");
     }
     
+    // Sidebar functionality
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('open');
+    }
+    
     // Event handlers
     function toggleCreatePost() {
       state.showCreatePost = !state.showCreatePost;
@@ -879,8 +955,28 @@
       storage.setItem('poojaBlogPosts', JSON.stringify(state.posts));
     }
     
+    // Load sidebar script dynamically
+    function loadScript(src) {
+      return new Promise(function(resolve, reject) {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+    
     // Initialize the app
-    renderApp();
+    window.onload = function() {
+      renderApp();
+      loadScript('sidebar.js')
+        .then(() => {
+          initializeSidebar();
+        })
+        .catch(error => {
+          console.error('Error loading sidebar:', error);
+        });
+    };
   </script>
 </body>
 </html>
