@@ -1,1338 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pooja's Blog Canvas</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-            width: 100%;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            overflow: hidden;
-        }
-
-        .canvas-container {
-            width: 100vw;
-            height: 100vh;
-            background-color: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sidebar {
-            width: 300px;
-            height: 100%;
-            background-color: #f8f8f8;
-            padding: 30px;
-            border-right: 1px solid #eee;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .total-views {
-            padding: 10px;
-            background-color: #f9f9f9;
-            color: #333;
-            border: 2px solid #4ecdc4;
-            border-radius: 8px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .profile-photo {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background-color: #ddd;
-            margin-bottom: 20px;
-            display: block;
-            object-fit: cover;
-        }
-
-        .button-container {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            justify-content: center;
-            flex-wrap: nowrap;
-        }
-
-        .edit-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s;
-            background-color: #4ecdc4;
-            color: white;
-        }
-
-        .edit-btn:hover {
-            background-color: #45b7b0;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .divider {
-            width: 80%;
-            height: 1px;
-            background-color: #ddd;
-            margin: 20px 0;
-        }
-
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
-        .menu-btn {
-            width: 80%;
-            padding: 10px;
-            margin: 5px 0;
-            border: none;
-            border-radius: 5px;
-            background-color: #ffffff;
-            color: #333;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
-        }
-
-        .menu-btn:hover {
-            background-color: #f0f0f0;
-        }
-
-        .subcategories {
-            width: 70%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-left: 20px;
-        }
-
-        .subcategory-btn {
-            width: 100%;
-            padding: 8px;
-            margin: 3px 0;
-            border: none;
-            border-radius: 5px;
-            background-color: #f5f5f5;
-            color: #666;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
-        }
-
-        .subcategory-btn:hover {
-            background-color: #e0e0e0;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            overflow-y: auto;
-        }
-
-        .welcome-text {
-            font-size: 72px;
-            color: #333333;
-            text-align: center;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            line-height: 1.2;
-        }
-
-        .dashboard {
-            width: 100%;
-            padding: 20px;
-            display: none;
-            flex-direction: column;
-            gap: 30px;
-            align-items: center;
-        }
-
-        .dashboard-header {
-            font-size: 48px;
-            color: #333333;
-            text-align: center;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 20px;
-        }
-
-        .dashboard-options {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .dashboard-btn {
-            padding: 15px 30px;
-            background-color: #4ecdc4;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .dashboard-btn:hover {
-            background-color: #45b7b0;
-            transform: scale(1.05);
-        }
-
-        .dashboard-btn i {
-            font-size: 20px;
-        }
-
-        .views-count {
-            padding: 15px 30px;
-            background-color: #f9f9f9;
-            color: #333;
-            border: 2px solid #4ecdc4;
-            border-radius: 8px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .recent-posts {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 800px;
-        }
-
-        .recent-post-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.3s;
-        }
-
-        .recent-post-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .recent-post-title {
-            font-size: 16px;
-            color: #333;
-            font-weight: bold;
-            max-width: 60%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .recent-post-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .recent-post-btn {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-
-        .edit-post-btn {
-            background-color: #4ecdc4;
-            color: white;
-        }
-
-        .edit-post-btn:hover {
-            background-color: #45b7b0;
-        }
-
-        .delete-post-btn {
-            background-color: #ff6b6b;
-            color: white;
-        }
-
-        .delete-post-btn:hover {
-            background-color: #ff5252;
-        }
-
-        .posts-container {
-            width: 100%;
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-            padding: 20px;
-            align-items: center;
-        }
-
-        .post-card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .post-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .post-image {
-            width: 100%;
-            height: 200px;
-            background-color: #eee;
-            object-fit: cover;
-        }
-
-        .post-content {
-            padding: 20px;
-            flex: 1;
-        }
-
-        .post-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .post-category {
-            display: inline-block;
-            background-color: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .post-text {
-            color: #555;
-            margin-bottom: 15px;
-            line-height: 1.5;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-        }
-
-        .post-date {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .post-actions {
-            display: flex;
-            gap: 10px;
-            padding: 0 20px 20px 20px;
-            justify-content: flex-end;
-        }
-
-        .post-btn {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-
-        .new-post-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 24px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, background-color 0.3s;
-            z-index: 1000;
-        }
-
-        .new-post-btn:hover {
-            transform: scale(1.1);
-            background-color: #ff5252;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: white;
-            width: 80%;
-            max-width: 800px;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 24px;
-            color: #888;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .close-modal:hover {
-            color: #333;
-        }
-
-        .modal h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 24px;
-            border-bottom: 2px solid #4ecdc4;
-            padding-bottom: 10px;
-        }
-
-        .modal label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        .modal input[type="text"],
-        .modal input[type="date"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .modal select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            background-color: white;
-        }
-
-        .modal .content-pages {
-            display: flex;
-            gap: 20px;
-            margin-top: 10px;
-        }
-
-        .modal .content-page {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal .content-page textarea {
-            width: 100%;
-            height: 200px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            resize: none;
-            font-size: 16px;
-            font-family: Arial, sans-serif;
-            background-color: #f9f5e7;
-        }
-
-        .modal .word-count {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-            text-align: right;
-        }
-
-        .modal .word-count.exceeded {
-            color: #ff6b6b;
-        }
-
-        .modal .image-preview {
-            max-width: 300px;
-            max-height: 200px;
-            margin-top: 10px;
-            display: none;
-            border-radius: 5px;
-        }
-
-        .modal .button-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .modal .nav-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .modal button {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .cancel-btn {
-            background-color: #e0e0e0;
-            color: #333;
-        }
-
-        .cancel-btn:hover {
-            background-color: #d0d0d0;
-        }
-
-        .publish-btn, .update-btn, .preview-btn {
-            background-color: #4ecdc4;
-            color: white;
-        }
-
-        .publish-btn:hover, .update-btn:hover, .preview-btn:hover {
-            background-color: #45b7b0;
-        }
-
-        .nav-btn {
-            background-color: #4ecdc4;
-            color: white;
-        }
-
-        .nav-btn:hover {
-            background-color: #45b7b0;
-        }
-
-        .nav-btn:disabled {
-            background-color: #e0e0e0;
-            cursor: not-allowed;
-        }
-
-        .preview-container {
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .preview-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            text-align: center;
-        }
-
-        .preview-pages {
-            display: flex;
-            gap: 20px;
-        }
-
-        .preview-page {
-            flex: 1;
-            background-color: #f9f5e7;
-            padding: 20px;
-            border-radius: 10px;
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-        }
-
-        .preview-page.left {
-            text-align: left;
-        }
-
-        .preview-page.right {
-            text-align: center;
-        }
-
-        .preview-page p {
-            color: #555;
-            line-height: 1.5;
-        }
-
-        .preview-image {
-            max-width: 100%;
-            max-height: 150px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-
-        .add-image-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #4ecdc4;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-
-        .add-image-btn:hover {
-            background-color: #45b7b0;
-        }
-
-        @media (max-width: 1200px) {
-            .welcome-text {
-                font-size: 48px;
-            }
-            .sidebar {
-                width: 250px;
-            }
-            .profile-photo {
-                width: 150px;
-                height: 150px;
-            }
-            .edit-btn {
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
-            }
-            .menu-btn {
-                font-size: 14px;
-                padding: 8px;
-            }
-            .subcategory-btn {
-                font-size: 12px;
-                padding: 6px;
-            }
-            .dashboard-header {
-                font-size: 36px;
-            }
-            .dashboard-btn, .views-count {
-                padding: 12px 20px;
-                font-size: 14px;
-            }
-            .recent-post-title {
-                font-size: 14px;
-            }
-            .recent-post-btn {
-                padding: 4px 8px;
-                font-size: 12px;
-            }
-            .new-post-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
-                bottom: 20px;
-                right: 20px;
-            }
-            .modal-content {
-                width: 90%;
-                padding: 20px;
-            }
-            .post-card {
-                max-width: 600px;
-            }
-            .content-pages, .preview-pages {
-                flex-direction: column;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pooja's Blog</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+  
+  <!-- React and ReactDOM -->
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel for JSX -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.2/babel.min.js"></script>
+  
+  <!-- Feather Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  
+  <style>
+    /* Fix for modals on mobile */
+    .modal-scrollable {
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    /* Icon styles */
+    .feather {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    
+    .feather-sm {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .feather-lg {
+      width: 48px;
+      height: 48px;
+    }
+  </style>
 </head>
-<body>
-    <div class="canvas-container">
-        <div class="sidebar">
-            <div class="total-views"><i class="fas fa-chart-line"></i> Total Views: <span id="totalViews">0</span></div>
-            <button class="menu-btn" id="createStoryBtn">Create New Stories</button>
-            <div class="divider"></div>
-            <img src="https://via.placeholder.com/200" alt="Profile Photo" class="profile-photo" id="profilePhoto">
-            <div class="button-container">
-                <button class="edit-btn" id="editBtn" title="Edit/Add Photo"><i class="fas fa-edit"></i></button>
-            </div>
-            <div class="divider"></div>
-            <div class="sidebar-menu">
-                <button class="menu-btn" id="dashboardBtn">Dashboard</button>
-                <button class="menu-btn" id="postsBtn">All Posts</button>
-                <button class="menu-btn" id="storiesBtn">Stories</button>
-                <div class="subcategories">
-                    <button class="subcategory-btn" id="frictionBtn">Friction</button>
-                    <button class="subcategory-btn" id="realStoryBtn">Real Story</button>
-                    <button class="subcategory-btn" id="comedyStoryBtn">Comedy Story</button>
-                </div>
-                <div class="divider"></div>
-            </div>
-            <input type="file" accept="image/*" class="file-input" id="fileInput">
-        </div>
-        <div class="main-content">
-            <div class="welcome-text" id="welcomeText">Welcome to Pooja's Blog</div>
-            <div class="dashboard" id="dashboard">
-                <div class="dashboard-header">Welcome to Pooja's Blog</div>
-                <div class="dashboard-options">
-                    <button class="dashboard-btn" id="createPostBtn"><i class="fas fa-plus-circle"></i> Create New Post</button>
-                    <button class="dashboard-btn" id="viewPostsBtn"><i class="fas fa-eye"></i> View Posts</button>
-                    <div class="views-count"><i class="fas fa-chart-line"></i> Number of Views: <span id="viewsCount">0</span></div>
-                </div>
-                <div class="recent-posts" id="recentPosts"></div>
-            </div>
-            <div class="posts-container" id="postsContainer">
-                <!-- Posts will be dynamically added here -->
-            </div>
-        </div>
-    </div>
+<body class="bg-gray-100">
+  <div id="root"></div>
 
-    <!-- New Post Button -->
-    <button class="new-post-btn" id="newPostBtn">
-        <i class="fas fa-plus"></i>
-    </button>
+  <script type="text/babel">
+    // Destructure required components from React
+    const { useState, useEffect } = React;
+    
+    // Storage helper with fallback to memory storage when localStorage is unavailable
+    const storage = {
+      data: {},
+      
+      isAvailable: () => {
+        try {
+          const testKey = "__storage_test__";
+          window.localStorage.setItem(testKey, testKey);
+          window.localStorage.removeItem(testKey);
+          return true;
+        } catch(e) {
+          console.log("localStorage is not available, using in-memory storage instead");
+          return false;
+        }
+      },
+      
+      getItem: (key) => {
+        try {
+          if (storage.isAvailable()) {
+            return window.localStorage.getItem(key);
+          }
+          return storage.data[key] || null;
+        } catch (e) {
+          return storage.data[key] || null;
+        }
+      },
+      
+      setItem: (key, value) => {
+        try {
+          if (storage.isAvailable()) {
+            window.localStorage.setItem(key, value);
+          }
+          storage.data[key] = value;
+        } catch (e) {
+          storage.data[key] = value;
+        }
+      }
+    };
+    
+    // Custom Icon component using Feather icons
+    const Icon = ({ name, size = 24, className = "" }) => {
+      const sizeClass = size === 48 ? "feather-lg" : size === 16 ? "feather-sm" : "";
+      const fullClass = `feather feather-${name} ${sizeClass} ${className}`;
+      
+      useEffect(() => {
+        // Replace the icon element with Feather SVG
+        if (window.feather) {
+          feather.replace();
+        }
+      }, []);
+      
+      return <i data-feather={name} className={fullClass}></i>;
+    };
 
-    <!-- New Post/Edit Modal -->
-    <div class="modal" id="newPostModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeModal">×</span>
-            <h2 id="modalTitle">Create New Post</h2>
-            <form id="newPostForm">
-                <input type="hidden" id="postId">
-                <label for="postTitle">Story Title</label>
-                <input type="text" id="postTitle" placeholder="Enter story title" required>
-                <label for="postDate">Date</label>
-                <input type="date" id="postDate" required>
-                <label for="storyType">Story Type</label>
-                <select id="storyType" required>
-                    <option value="">Select a story type</option>
-                    <option value="friction">Friction</option>
-                    <option value="realStory">Real Story</option>
-                    <option value="comedyStory">Comedy Story</option>
-                </select>
-                <label for="postContent">Content</label>
-                <div class="content-pages">
-                    <div class="content-page">
-                        <textarea id="postContentPage1" placeholder="from here enabel me to write story max 200 words per page then flip to next page" required></textarea>
-                        <div class="word-count" id="wordCountPage1">0/200 words</div>
+    const PoojasBlog = () => {
+      const [showCreatePost, setShowCreatePost] = useState(false);
+      const [showViewPost, setShowViewPost] = useState(false);
+      const [showEditPost, setShowEditPost] = useState(false);
+      const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+      const [postToDelete, setPostToDelete] = useState(null);
+      const [posts, setPosts] = useState(() => {
+        // Load posts from storage on initial render
+        const savedPosts = storage.getItem('poojaBlogPosts');
+        return savedPosts ? JSON.parse(savedPosts) : [];
+      });
+      const [newPost, setNewPost] = useState({
+        title: '',
+        content: '',
+        image: null
+      });
+      const [currentPost, setCurrentPost] = useState(null);
+      const [editPost, setEditPost] = useState({
+        id: null,
+        title: '',
+        content: '',
+        image: null
+      });
+      
+      // Initialize feather icons when component mounts
+      useEffect(() => {
+        if (window.feather) {
+          feather.replace();
+        }
+      }, []);
+      
+      // Refresh feather icons when posts change or modals open/close
+      useEffect(() => {
+        if (window.feather) {
+          feather.replace();
+        }
+      }, [posts, showCreatePost, showViewPost, showEditPost, showDeleteConfirm]);
+      
+      // Save posts to storage whenever they change
+      useEffect(() => {
+        storage.setItem('poojaBlogPosts', JSON.stringify(posts));
+      }, [posts]);
+
+      const handleCreatePost = () => {
+        if (newPost.title.trim() === '' || newPost.content.trim() === '') {
+          return;
+        }
+
+        const post = {
+          id: Date.now(),
+          title: newPost.title,
+          content: newPost.content,
+          date: new Date().toLocaleDateString(),
+          image: newPost.image
+        };
+
+        setPosts([post, ...posts]);
+        setNewPost({ title: '', content: '', image: null });
+        setShowCreatePost(false);
+      };
+      
+      const handleViewPost = (post) => {
+        setCurrentPost(post);
+        setShowViewPost(true);
+      };
+      
+      const handleEditClick = (post) => {
+        setEditPost({
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          image: post.image
+        });
+        setShowEditPost(true);
+      };
+      
+      const handleUpdatePost = () => {
+        if (editPost.title.trim() === '' || editPost.content.trim() === '') {
+          return;
+        }
+        
+        const updatedPosts = posts.map(post => 
+          post.id === editPost.id ? 
+          { ...post, title: editPost.title, content: editPost.content, image: editPost.image } : 
+          post
+        );
+        
+        setPosts(updatedPosts);
+        setShowEditPost(false);
+      };
+      
+      const handleImageUpload = (e, isEdit = false) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (isEdit) {
+            setEditPost({...editPost, image: reader.result});
+          } else {
+            setNewPost({...newPost, image: reader.result});
+          }
+        };
+        reader.readAsDataURL(file);
+      };
+
+      const handleDeletePost = (id) => {
+        // Using a custom confirmation dialog for better UX
+        setPostToDelete(id);
+        setShowDeleteConfirm(true);
+      };
+
+      return (
+        <div className="min-h-screen bg-gray-100 p-6">
+          <div className="max-w-4xl mx-auto">
+            {/* Header */}
+            <header className="bg-white rounded-lg shadow-md p-6 mb-6">
+              <div className="flex flex-col sm:flex-row justify-between items-center">
+                <h1 className="text-3xl font-bold text-purple-800 mb-4 sm:mb-0">Welcome to Pooja's Blog</h1>
+                <button 
+                  onClick={() => setShowCreatePost(!showCreatePost)}
+                  className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  <Icon name="plus-circle" />
+                  <span>Create New Post</span>
+                </button>
+              </div>
+            </header>
+
+            {!storage.isAvailable() && (
+              <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded" role="alert">
+                <p className="font-bold">Note:</p>
+                <p>This blog is running in a restricted environment. Your posts will only be saved for this session and will not persist when you close the browser.</p>
+              </div>
+            )}
+
+            {/* Create Post Form */}
+            {showCreatePost && (
+              <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h2 className="text-xl font-semibold mb-4 text-purple-800">Create New Post</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <input
+                      type="text"
+                      id="title"
+                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      value={newPost.title}
+                      onChange={(e) => setNewPost({...newPost, title: e.target.value})}
+                      placeholder="Enter post title"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                    <textarea
+                      id="content"
+                      rows={6}
+                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      value={newPost.content}
+                      onChange={(e) => setNewPost({...newPost, content: e.target.value})}
+                      placeholder="Write your post content here..."
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
+                      Add Image (optional)
+                    </label>
+                    <div className="flex items-center space-x-2">
+                      <label className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50">
+                        <Icon name="camera" className="mr-2 text-gray-500" />
+                        <span className="text-sm text-gray-600">Choose Image</span>
+                        <input
+                          type="file"
+                          id="image"
+                          className="hidden"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e)}
+                        />
+                      </label>
+                      {newPost.image && (
+                        <button
+                          onClick={() => setNewPost({...newPost, image: null})}
+                          className="text-xs text-red-500 hover:text-red-700"
+                        >
+                          Remove
+                        </button>
+                      )}
                     </div>
-                    <div class="content-page">
-                        <textarea id="postContentPage2" placeholder="from here enabel me to write story max 200 words per page then flip to next page"></textarea>
-                        <div class="word-count" id="wordCountPage2">0/200 words</div>
-                    </div>
+                    {newPost.image && (
+                      <div className="mt-2">
+                        <img 
+                          src={newPost.image} 
+                          alt="Post preview" 
+                          className="max-h-48 rounded-md border border-gray-200" 
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex justify-end gap-3">
+                    <button 
+                      onClick={() => setShowCreatePost(false)}
+                      className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={handleCreatePost}
+                      className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+                    >
+                      Publish
+                    </button>
+                  </div>
                 </div>
-                <label for="postImage">Add Image (optional)</label>
-                <input type="file" id="postImage" accept="image/*">
-                <img id="postImagePreview" class="image-preview" alt="Post Image Preview">
-                <div class="preview-container" id="previewContainer">
-                    <div class="preview-title" id="previewTitle"></div>
-                    <div class="preview-pages">
-                        <div class="preview-page left" id="previewPage1"></div>
-                        <div class="preview-page right" id="previewPage2">
-                            <button type="button" class="add-image-btn" id="addImageBtn">Add Image</button>
+              </div>
+            )}
+
+            {/* Blog Posts */}
+            <div className="space-y-6">
+              {posts.length > 0 ? (
+                posts.map(post => (
+                  <div key={post.id} className="bg-white rounded-lg shadow-md p-6">
+                    <h2 className="text-2xl font-bold mb-2 text-purple-800">{post.title}</h2>
+                    <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                      <div className="flex items-center">
+                        <Icon name="calendar" size={16} className="mr-1" />
+                        <span>{post.date}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Icon name="user" size={16} className="mr-1" />
+                        <span>Pooja</span>
+                      </div>
+                    </div>
+                    
+                    {post.image && (
+                      <div className="mb-4">
+                        <img 
+                          src={post.image} 
+                          alt={post.title} 
+                          className="max-h-64 rounded-md mx-auto" 
+                        />
+                      </div>
+                    )}
+                    
+                    <p className="text-gray-700 whitespace-pre-line">
+                      {post.content.length > 200 
+                        ? post.content.substring(0, 200) + '...' 
+                        : post.content}
+                    </p>
+                    
+                    {/* Post Actions */}
+                    <div className="flex flex-wrap gap-3 mt-4 pt-3 border-t border-gray-100">
+                      <button 
+                        onClick={() => handleViewPost(post)}
+                        className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                      >
+                        <Icon name="eye" size={16} />
+                        <span>View</span>
+                      </button>
+                      <button 
+                        onClick={() => handleEditClick(post)}
+                        className="flex items-center gap-1 text-green-600 hover:text-green-800"
+                      >
+                        <Icon name="edit" size={16} />
+                        <span>Edit</span>
+                      </button>
+                      <button 
+                        onClick={() => handleDeletePost(post.id)}
+                        className="flex items-center gap-1 text-red-600 hover:text-red-800"
+                      >
+                        <Icon name="trash-2" size={16} />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="bg-white rounded-lg shadow-md p-12 text-center">
+                  <Icon name="book-open" size={48} className="mx-auto text-purple-300 mb-4" />
+                  <h3 className="text-xl font-medium text-gray-700 mb-2">No posts yet</h3>
+                  <p className="text-gray-500">Click "Create New Post" to start writing your first blog post.</p>
+                </div>
+              )}
+            </div>
+            
+            {/* View Post Modal */}
+            {showViewPost && currentPost && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-screen overflow-y-auto modal-scrollable">
+                  <div className="flex justify-between items-center p-4 border-b">
+                    <h2 className="text-xl font-semibold text-purple-800">View Post</h2>
+                    <button 
+                      onClick={() => setShowViewPost(false)} 
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      <Icon name="x" />
+                    </button>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold mb-2">{currentPost.title}</h3>
+                    <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                      <div className="flex items-center">
+                        <Icon name="calendar" size={16} className="mr-1" />
+                        <span>{currentPost.date}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Icon name="user" size={16} className="mr-1" />
+                        <span>Pooja</span>
+                      </div>
+                    </div>
+                    
+                    {currentPost.image && (
+                      <div className="mb-6">
+                        <img 
+                          src={currentPost.image} 
+                          alt={currentPost.title} 
+                          className="max-w-full rounded-md mx-auto" 
+                        />
+                      </div>
+                    )}
+                    
+                    <div className="prose max-w-none mt-4">
+                      <p className="whitespace-pre-line">{currentPost.content}</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-end gap-3 p-4 border-t">
+                    <button 
+                      onClick={() => setShowViewPost(false)}
+                      className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* Edit Post Modal */}
+            {showEditPost && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-screen overflow-y-auto modal-scrollable">
+                  <div className="flex justify-between items-center p-4 border-b">
+                    <h2 className="text-xl font-semibold text-purple-800">Edit Post</h2>
+                    <button 
+                      onClick={() => setShowEditPost(false)} 
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      <Icon name="x" />
+                    </button>
+                  </div>
+                  <div className="p-6">
+                    <div className="space-y-4">
+                      <div>
+                        <label htmlFor="edit-title" className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                        <input
+                          type="text"
+                          id="edit-title"
+                          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          value={editPost.title}
+                          onChange={(e) => setEditPost({...editPost, title: e.target.value})}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="edit-content" className="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                        <textarea
+                          id="edit-content"
+                          rows={8}
+                          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          value={editPost.content}
+                          onChange={(e) => setEditPost({...editPost, content: e.target.value})}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="edit-image" className="block text-sm font-medium text-gray-700 mb-1">
+                          Image
+                        </label>
+                        <div className="flex items-center space-x-2">
+                          <label className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50">
+                            <Icon name="camera" className="mr-2 text-gray-500" />
+                            <span className="text-sm text-gray-600">
+                              {editPost.image ? 'Change Image' : 'Add Image'}
+                            </span>
+                            <input
+                              type="file"
+                              id="edit-image"
+                              className="hidden"
+                              accept="image/*"
+                              onChange={(e) => handleImageUpload(e, true)}
+                            />
+                          </label>
+                          {editPost.image && (
+                            <button
+                              onClick={() => setEditPost({...editPost, image: null})}
+                              className="text-xs text-red-500 hover:text-red-700"
+                            >
+                              Remove
+                            </button>
+                          )}
                         </div>
+                        {editPost.image && (
+                          <div className="mt-2">
+                            <img 
+                              src={editPost.image} 
+                              alt="Post preview" 
+                              className="max-h-48 rounded-md border border-gray-200" 
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
+                  </div>
+                  <div className="flex justify-end gap-3 p-4 border-t">
+                    <button 
+                      onClick={() => setShowEditPost(false)}
+                      className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={handleUpdatePost}
+                      className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
                 </div>
-                <div class="button-row">
-                    <div class="nav-buttons">
-                        <button type="button" class="nav-btn" id="prevPostBtn" disabled>Previous</button>
-                        <button type="button" class="nav-btn" id="nextPostBtn" disabled>Next</button>
+              </div>
+            )}
+            
+            {/* Delete Confirmation Modal */}
+            {showDeleteConfirm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+                  <div className="p-6">
+                    <div className="flex items-center justify-center text-red-500 mb-4">
+                      <Icon name="trash-2" size={48} />
                     </div>
-                    <div>
-                        <button type="button" class="cancel-btn" id="cancelPost">Cancel</button>
-                        <button type="button" class="preview-btn" id="previewBtn">Preview</button>
-                        <button type="submit" class="publish-btn" id="publishBtn">Publish Post</button>
-                        <button type="button" class="update-btn" id="updateBtn" style="display: none;">Update Post</button>
+                    <h3 className="text-xl font-bold text-center mb-2">Delete Post</h3>
+                    <p className="text-gray-600 text-center mb-6">
+                      Are you sure you want to delete this post? This action cannot be undone.
+                    </p>
+                    <div className="flex justify-center gap-4">
+                      <button 
+                        onClick={() => setShowDeleteConfirm(false)}
+                        className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        onClick={() => {
+                          const filteredPosts = posts.filter(post => post.id !== postToDelete);
+                          setPosts(filteredPosts);
+                          setShowDeleteConfirm(false);
+                          
+                          // Close any open modals if they were showing the deleted post
+                          if (showViewPost && currentPost && currentPost.id === postToDelete) {
+                            setShowViewPost(false);
+                          }
+                          if (showEditPost && editPost.id === postToDelete) {
+                            setShowEditPost(false);
+                          }
+                        }}
+                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
                     </div>
+                  </div>
                 </div>
-            </form>
+              </div>
+            )}
+          </div>
         </div>
-    </div>
+      );
+    };
 
-    <script>
-        const profilePhoto = document.getElementById('profilePhoto');
-        const editBtn = document.getElementById('editBtn');
-        const dashboardBtn = document.getElementById('dashboardBtn');
-        const postsBtn = document.getElementById('postsBtn');
-        const storiesBtn = document.getElementById('storiesBtn');
-        const frictionBtn = document.getElementById('frictionBtn');
-        const realStoryBtn = document.getElementById('realStoryBtn');
-        const comedyStoryBtn = document.getElementById('comedyStoryBtn');
-        const createStoryBtn = document.getElementById('createStoryBtn');
-        const totalViews = document.getElementById('totalViews');
-        const fileInput = document.getElementById('fileInput');
-        const welcomeText = document.getElementById('welcomeText');
-        const dashboard = document.getElementById('dashboard');
-        const postsContainer = document.getElementById('postsContainer');
-        const recentPosts = document.getElementById('recentPosts');
-        const newPostBtn = document.getElementById('newPostBtn');
-        const createPostBtn = document.getElementById('createPostBtn');
-        const viewPostsBtn = document.getElementById('viewPostsBtn');
-        const viewsCount = document.getElementById('viewsCount');
-        const newPostModal = document.getElementById('newPostModal');
-        const closeModal = document.getElementById('closeModal');
-        const cancelPost = document.getElementById('cancelPost');
-        const newPostForm = document.getElementById('newPostForm');
-        const postImage = document.getElementById('postImage');
-        const postImagePreview = document.getElementById('postImagePreview');
-        const modalTitle = document.getElementById('modalTitle');
-        const publishBtn = document.getElementById('publishBtn');
-        const updateBtn = document.getElementById('updateBtn');
-        const postIdInput = document.getElementById('postId');
-        const prevPostBtn = document.getElementById('prevPostBtn');
-        const nextPostBtn = document.getElementById('nextPostBtn');
-        const postContentPage1 = document.getElementById('postContentPage1');
-        const postContentPage2 = document.getElementById('postContentPage2');
-        const wordCountPage1 = document.getElementById('wordCountPage1');
-        const wordCountPage2 = document.getElementById('wordCountPage2');
-        const previewBtn = document.getElementById('previewBtn');
-        const previewContainer = document.getElementById('previewContainer');
-        const previewTitle = document.getElementById('previewTitle');
-        const previewPage1 = document.getElementById('previewPage1');
-        const previewPage2 = document.getElementById('previewPage2');
-        const addImageBtn = document.getElementById('addImageBtn');
-        const placeholderUrl = 'https://via.placeholder.com/200';
-
-        let currentPostIndex = -1;
-        let isPreviewMode = false;
-
-        // Load initial data from localStorage
-        function loadInitialData() {
-            const savedImage = localStorage.getItem('profilePhoto');
-            profilePhoto.src = savedImage ? savedImage : placeholderUrl;
-            const savedViews = localStorage.getItem('viewsCount') || '0';
-            viewsCount.textContent = savedViews;
-            totalViews.textContent = savedViews;
-            loadRecentPosts();
-        }
-
-        window.addEventListener('load', loadInitialData);
-
-        // Handle profile photo upload
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imageData = e.target.result;
-                    profilePhoto.src = imageData;
-                    localStorage.setItem('profilePhoto', imageData);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert('Please select a valid image file!');
-            }
-        }
-
-        editBtn.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', handleImageUpload);
-
-        // Navigation between views
-        dashboardBtn.addEventListener('click', () => {
-            welcomeText.style.display = 'none';
-            dashboard.style.display = 'flex';
-            postsContainer.style.display = 'none';
-            loadRecentPosts();
-        });
-
-        postsBtn.addEventListener('click', () => {
-            welcomeText.style.display = 'none';
-            dashboard.style.display = 'none';
-            postsContainer.style.display = 'flex';
-            loadPosts();
-            incrementViews();
-        });
-
-        storiesBtn.addEventListener('click', () => {
-            alert('Stories overview would go here!');
-        });
-
-        frictionBtn.addEventListener('click', () => {
-            loadPostsByStoryType('friction');
-        });
-
-        realStoryBtn.addEventListener('click', () => {
-            loadPostsByStoryType('realStory');
-        });
-
-        comedyStoryBtn.addEventListener('click', () => {
-            loadPostsByStoryType('comedyStory');
-        });
-
-        createStoryBtn.addEventListener('click', openNewPostModal);
-
-        // Dashboard button actions
-        createPostBtn.addEventListener('click', openNewPostModal);
-        viewPostsBtn.addEventListener('click', () => {
-            welcomeText.style.display = 'none';
-            dashboard.style.display = 'none';
-            postsContainer.style.display = 'flex';
-            loadPosts();
-            incrementViews();
-        });
-
-        // New Post Modal Functions
-        newPostBtn.addEventListener('click', openNewPostModal);
-
-        function openNewPostModal() {
-            modalTitle.textContent = 'Create New Post';
-            publishBtn.style.display = 'block';
-            updateBtn.style.display = 'none';
-            newPostForm.reset();
-            postImagePreview.style.display = 'none';
-            postIdInput.value = '';
-            document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
-            postContentPage1.value = '';
-            postContentPage2.value = '';
-            updateWordCount(postContentPage1, wordCountPage1);
-            updateWordCount(postContentPage2, wordCountPage2);
-            newPostModal.style.display = 'flex';
-            document.getElementById('postTitle').focus();
-            currentPostIndex = -1;
-            isPreviewMode = false;
-            togglePreviewMode();
-            updateNavButtons();
-        }
-
-        closeModal.addEventListener('click', closeNewPostModal);
-        cancelPost.addEventListener('click', closeNewPostModal);
-
-        function closeNewPostModal() {
-            newPostModal.style.display = 'none';
-            newPostForm.reset();
-            postImagePreview.style.display = 'none';
-            postContentPage1.value = '';
-            postContentPage2.value = '';
-            updateWordCount(postContentPage1, wordCountPage1);
-            updateWordCount(postContentPage2, wordCountPage2);
-            currentPostIndex = -1;
-            isPreviewMode = false;
-            togglePreviewMode();
-        }
-
-        // Handle post image preview
-        postImage.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imageData = e.target.result;
-                    postImagePreview.src = imageData;
-                    postImagePreview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert('Please select a valid image file!');
-            }
-        });
-
-        // Add image in preview mode
-        addImageBtn.addEventListener('click', () => postImage.click());
-
-        // Word count and limit enforcement
-        function updateWordCount(textarea, wordCountElement) {
-            const text = textarea.value.trim();
-            const words = text.length > 0 ? text.split(/\s+/).length : 0;
-            wordCountElement.textContent = `${words}/200 words`;
-            if (words > 200) {
-                wordCountElement.classList.add('exceeded');
-                textarea.value = text.split(/\s+/).slice(0, 200).join(' ');
-                updateWordCount(textarea, wordCountElement);
-            } else {
-                wordCountElement.classList.remove('exceeded');
-            }
-        }
-
-        postContentPage1.addEventListener('input', () => updateWordCount(postContentPage1, wordCountPage1));
-        postContentPage2.addEventListener('input', () => updateWordCount(postContentPage2, wordCountPage2));
-
-        // Preview functionality
-        previewBtn.addEventListener('click', () => {
-            isPreviewMode = !isPreviewMode;
-            togglePreviewMode();
-        });
-
-        function togglePreviewMode() {
-            const formElements = [
-                document.querySelector('label[for="postTitle"]'),
-                document.getElementById('postTitle'),
-                document.querySelector('label[for="postDate"]'),
-                document.getElementById('postDate'),
-                document.querySelector('label[for="storyType"]'),
-                document.getElementById('storyType'),
-                document.querySelector('label[for="postContent"]'),
-                document.querySelector('.content-pages'),
-                document.querySelector('label[for="postImage"]'),
-                document.getElementById('postImage'),
-                document.getElementById('postImagePreview')
-            ];
-
-            if (isPreviewMode) {
-                // Hide form elements
-                formElements.forEach(el => el.style.display = 'none');
-                previewContainer.style.display = 'flex';
-                previewBtn.textContent = 'Edit';
-
-                // Populate preview
-                previewTitle.textContent = document.getElementById('postTitle').value || 'Untitled Story';
-                previewPage1.innerHTML = `<p>${postContentPage1.value || 'No content for Page 1'}</p>`;
-                if (postContentPage2.value) {
-                    previewPage2.innerHTML = `<p>${postContentPage2.value}</p>`;
-                } else if (postImagePreview.src && postImagePreview.style.display === 'block') {
-                    previewPage2.innerHTML = `<img src="${postImagePreview.src}" class="preview-image" alt="Preview Image">`;
-                } else {
-                    previewPage2.innerHTML = `<button type="button" class="add-image-btn" id="addImageBtn">Add Image</button>`;
-                }
-            } else {
-                // Show form elements
-                formElements.forEach(el => el.style.display = 'block');
-                if (postImagePreview.src && postImagePreview.style.display !== 'block') {
-                    postImagePreview.style.display = 'none';
-                }
-                previewContainer.style.display = 'none';
-                previewBtn.textContent = 'Preview';
-            }
-        }
-
-        // Submit new post
-        newPostForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const id = postIdInput.value;
-            const title = document.getElementById('postTitle').value;
-            const date = document.getElementById('postDate').value;
-            const storyType = document.getElementById('storyType').value;
-            const contentPage1 = postContentPage1.value;
-            const contentPage2 = postContentPage2.value;
-            const imagePreview = document.getElementById('postImagePreview');
-            const image = imagePreview.style.display === 'block' ? imagePreview.src : null;
-
-            // Format the date
-            const formattedDate = new Date(date).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-
-            if (id) {
-                // Update existing post
-                const postIndex = posts.findIndex(post => post.id === id);
-                posts[postIndex] = { id, title, date: formattedDate, storyType, contentPage1, contentPage2, image };
-                localStorage.setItem('blogPosts', JSON.stringify(posts));
-                alert('Post updated successfully!');
-            } else {
-                // Create new post
-                const newPost = { id: Date.now().toString(), title, date: formattedDate, storyType, contentPage1, contentPage2, image };
-                posts.push(newPost);
-                localStorage.setItem('blogPosts', JSON.stringify(posts));
-                alert('Post published successfully!');
-            }
-
-            closeNewPostModal();
-            loadPosts();
-            loadRecentPosts();
-        });
-
-        // Load all posts in a vertical grid
-        function loadPosts() {
-            const postElements = postsContainer.querySelectorAll('.post-card');
-            postElements.forEach(post => post.remove());
-
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-
-            if (posts.length === 0) {
-                const noPostsMsg = document.createElement('div');
-                noPostsMsg.className = 'post-card';
-                noPostsMsg.innerHTML = `
-                    <div class="post-content">
-                        <div class="post-title">No Posts Yet</div>
-                        <div class="post-text">Create your first post from the Dashboard or the + button.</div>
-                    </div>
-                `;
-                postsContainer.appendChild(noPostsMsg);
-                return;
-            }
-
-            posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-            posts.forEach(post => {
-                const postEl = document.createElement('div');
-                postEl.className = 'post-card';
-                postEl.innerHTML = `
-                    ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image">` : ''}
-                    <div class="post-content">
-                        <div class="post-title">${post.title}</div>
-                        <div class="post-category">${getStoryTypeName(post.storyType)}</div>
-                        <div class="post-text">${post.contentPage1}</div>
-                        ${post.contentPage2 ? `<div class="post-text">${post.contentPage2}</div>` : ''}
-                        <div class="post-date">${post.date}</div>
-                    </div>
-                    <div class="post-actions">
-                        <button class="post-btn edit-post-btn" data-id="${post.id}">Edit</button>
-                        <button class="post-btn delete-post-btn" data-id="${post.id}">Delete</button>
-                    </div>
-                `;
-                postsContainer.appendChild(postEl);
-
-                postEl.querySelector('.edit-post-btn').addEventListener('click', () => editPost(post.id));
-                postEl.querySelector('.delete-post-btn').addEventListener('click', () => deletePost(post.id));
-            });
-        }
-
-        // Load posts by story type
-        function loadPostsByStoryType(storyType) {
-            welcomeText.style.display = 'none';
-            dashboard.style.display = 'none';
-            postsContainer.style.display = 'flex';
-
-            const postElements = postsContainer.querySelectorAll('.post-card');
-            postElements.forEach(post => post.remove());
-
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const filteredPosts = posts.filter(post => post.storyType === storyType);
-
-            if (filteredPosts.length === 0) {
-                const noPostsMsg = document.createElement('div');
-                noPostsMsg.className = 'post-card';
-                noPostsMsg.innerHTML = `
-                    <div class="post-content">
-                        <div class="post-title">No Posts in ${getStoryTypeName(storyType)}</div>
-                        <div class="post-text">Create a new post in this story type!</div>
-                    </div>
-                `;
-                postsContainer.appendChild(noPostsMsg);
-                return;
-            }
-
-            filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-            filteredPosts.forEach(post => {
-                const postEl = document.createElement('div');
-                postEl.className = 'post-card';
-                postEl.innerHTML = `
-                    ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image">` : ''}
-                    <div class="post-content">
-                        <div class="post-title">${post.title}</div>
-                        <div class="post-category">${getStoryTypeName(post.storyType)}</div>
-                        <div class="post-text">${post.contentPage1}</div>
-                        ${post.contentPage2 ? `<div class="post-text">${post.contentPage2}</div>` : ''}
-                        <div class="post-date">${post.date}</div>
-                    </div>
-                    <div class="post-actions">
-                        <button class="post-btn edit-post-btn" data-id="${post.id}">Edit</button>
-                        <button class="post-btn delete-post-btn" data-id="${post.id}">Delete</button>
-                    </div>
-                `;
-                postsContainer.appendChild(postEl);
-
-                postEl.querySelector('.edit-post-btn').addEventListener('click', () => editPost(post.id));
-                postEl.querySelector('.delete-post-btn').addEventListener('click', () => deletePost(post.id));
-            });
-        }
-
-        // Load up to 6 recent posts in dashboard
-        function loadRecentPosts() {
-            recentPosts.innerHTML = '';
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-
-            posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-            const recent = posts.slice(0, 6);
-
-            if (recent.length === 0) {
-                const noPostsMsg = document.createElement('div');
-                noPostsMsg.className = 'recent-post-card';
-                noPostsMsg.innerHTML = `
-                    <span class="recent-post-title">No recent posts yet</span>
-                    <span>Create one now!</span>
-                `;
-                recentPosts.appendChild(noPostsMsg);
-                return;
-            }
-
-            recent.forEach(post => {
-                const postEl = document.createElement('div');
-                postEl.className = "recent-post-card";
-                postEl.innerHTML = `
-                    <span class="recent-post-title">${post.title}</span>
-                    <div class="recent-post-actions">
-                        <button class="recent-post-btn edit-post-btn" data-id="${post.id}">Edit</button>
-                        <button class="recent-post-btn delete-post-btn" data-id="${post.id}">Delete</button>
-                    </div>
-                `;
-                recentPosts.appendChild(postEl);
-
-                postEl.querySelector('.edit-post-btn').addEventListener('click', () => editPost(post.id));
-                postEl.querySelector('.delete-post-btn').addEventListener('click', () => deletePost(post.id));
-            });
-        }
-
-        // Edit post
-        function editPost(id) {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const postIndex = posts.findIndex(p => p.id === id);
-            const post = posts[postIndex];
-            if (!post) return;
-
-            modalTitle.textContent = 'Edit Post';
-            publishBtn.style.display = 'none';
-            updateBtn.style.display = 'block';
-            postIdInput.value = post.id;
-            document.getElementById('postTitle').value = post.title;
-            const dateParts = post.date.split(' ');
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            const month = (monthNames.indexOf(dateParts[0]) + 1).toString().padStart(2, '0');
-            const day = dateParts[1].replace(',', '').padStart(2, '0');
-            const year = dateParts[2];
-            document.getElementById('postDate').value = `${year}-${month}-${day}`;
-            document.getElementById('storyType').value = post.storyType;
-            postContentPage1.value = post.contentPage1 || '';
-            postContentPage2.value = post.contentPage2 || '';
-            updateWordCount(postContentPage1, wordCountPage1);
-            updateWordCount(postContentPage2, wordCountPage2);
-            if (post.image) {
-                postImagePreview.src = post.image;
-                postImagePreview.style.display = 'block';
-            } else {
-                postImagePreview.style.display = 'none';
-            }
-            newPostModal.style.display = 'flex';
-            currentPostIndex = postIndex;
-            isPreviewMode = false;
-            togglePreviewMode();
-            updateNavButtons();
-        }
-
-        // Delete post
-        function deletePost(id) {
-            if (confirm('Are you sure you want to delete this post?')) {
-                const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-                const updatedPosts = posts.filter(p => p.id !== id);
-                localStorage.setItem('blogPosts', JSON.stringify(updatedPosts));
-                loadPosts();
-                loadRecentPosts();
-                alert('Post deleted successfully!');
-                if (currentPostIndex >= 0) {
-                    currentPostIndex = -1;
-                    closeNewPostModal();
-                }
-            }
-        }
-
-        // Navigate to previous post
-        prevPostBtn.addEventListener('click', () => {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            if (currentPostIndex > 0) {
-                currentPostIndex--;
-                editPost(posts[currentPostIndex].id);
-            }
-        });
-
-        // Navigate to next post
-        nextPostBtn.addEventListener('click', () => {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            if (currentPostIndex < posts.length - 1) {
-                currentPostIndex++;
-                editPost(posts[currentPostIndex].id);
-            }
-        });
-
-        // Update navigation buttons state
-        function updateNavButtons() {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            prevPostBtn.disabled = currentPostIndex <= 0;
-            nextPostBtn.disabled = currentPostIndex >= posts.length - 1 || currentPostIndex === -1;
-        }
-
-        updateBtn.addEventListener('click', () => newPostForm.dispatchEvent(new Event('submit')));
-
-        // Increment and save views count
-        function incrementViews() {
-            let views = parseInt(localStorage.getItem('viewsCount')) || 0;
-            views++;
-            localStorage.setItem('viewsCount', views);
-            viewsCount.textContent = views;
-            totalViews.textContent = views;
-        }
-
-        // Helper function to get story type display name
-        function getStoryTypeName(storyType) {
-            const storyTypes = {
-                friction: 'Friction',
-                realStory: 'Real Story',
-                comedyStory: 'Comedy Story'
-            };
-            return storyTypes[storyType] || storyType;
-        }
-
-        // Close modal when clicking outside
-        window.addEventListener('click', function(e) {
-            if (e.target === newPostModal) {
-                closeNewPostModal();
-            }
-        });
-    </script>
+    // Render the app
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<PoojasBlog />);
+  </script>
 </body>
 </html>
