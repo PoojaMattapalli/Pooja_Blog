@@ -969,14 +969,20 @@
     // Initialize the app
     window.onload = function() {
       renderApp();
-      loadScript('sidebar.js')
-        .then(() => {
-          initializeSidebar();
-        })
-        .catch(error => {
-          console.error('Error loading sidebar:', error);
-        });
     };
+  </script>
+  
+  <!-- Direct include of sidebar.js -->
+  <script src="sidebar.js"></script>
+  <script>
+    // Try to initialize sidebar after the page is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof initializeSidebar === 'function') {
+        initializeSidebar();
+      } else {
+        console.error('Sidebar initialization function not found');
+      }
+    });
   </script>
 </body>
 </html>
