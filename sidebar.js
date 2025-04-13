@@ -29,13 +29,24 @@ function getProfileData() {
     image: null
   };
   
-  const profileData = storage.getItem('poojaBlogProfile');
+  // Make sure we're using localStorage instead of a custom storage object
+  const profileData = localStorage.getItem('poojaBlogProfile');
   return profileData ? JSON.parse(profileData) : defaultProfile;
 }
 
 // Save profile data to storage
 function saveProfileData(data) {
-  storage.setItem('poojaBlogProfile', JSON.stringify(data));
+  localStorage.setItem('poojaBlogProfile', JSON.stringify(data));
+}
+
+// Helper function to escape HTML for security
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 // Render the sidebar content
@@ -56,8 +67,8 @@ function renderSidebar() {
         </div>
         <input type="file" id="profile-upload" accept="image/*" style="display: none;" onchange="handleProfileImageUpload(event)">
         
-        <h2 style="color: white; font-size: 24px; margin-bottom: 5px;" id="profile-name">${profile.name}</h2>
-        <p style="color: #e2d9f3; font-size: 14px;" id="profile-tagline">${profile.tagline}</p>
+        <h2 style="color: white; font-size: 24px; margin-bottom: 5px;" id="profile-name">${escapeHtml(profile.name)}</h2>
+        <p style="color: #e2d9f3; font-size: 14px;" id="profile-tagline">${escapeHtml(profile.tagline)}</p>
         <button onclick="editProfileInfo()" style="margin-top: 10px; background: transparent; border: 1px solid #a78bfa; color: #e2d9f3; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">Edit Profile</button>
       </div>
       
@@ -109,13 +120,49 @@ function initializeProfileImage() {
     const file = event.target.files[0];
     if (!file) return;
     
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+    
+    // Check file size (limit to 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Image size should be less than 2MB');
+      return;
+    }
+    
     const reader = new FileReader();
     reader.onload = function(e) {
       const profile = getProfileData();
       profile.image = e.target.result;
       saveProfileData(profile);
       renderSidebar();
+      
+      // Visual feedback
+      const notification = document.createElement('div');
+      notification.textContent = 'Profile image updated!';
+      notification.style.position = 'fixed';
+      notification.style.bottom = '20px';
+      notification.style.right = '20px';
+      notification.style.backgroundColor = '#a78bfa';
+      notification.style.color = 'white';
+      notification.style.padding = '10px 15px';
+      notification.style.borderRadius = '4px';
+      notification.style.zIndex = '1000';
+      document.body.appendChild(notification);
+      
+      // Remove notification after 3 seconds
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 3000);
     };
+    
+    // Add error handling for the file reader
+    reader.onerror = function() {
+      alert('Error reading file. Please try again.');
+    };
+    
     reader.readAsDataURL(file);
   };
   
@@ -142,8 +189,8 @@ function updateRecentPosts() {
   const recentPostsElement = document.getElementById('recent-posts');
   if (!recentPostsElement) return;
   
-  // Get posts from the app state
-  const posts = JSON.parse(storage.getItem('poojaBlogPosts') || '[]');
+  // Get posts from localStorage
+  const posts = JSON.parse(localStorage.getItem('poojaBlogPosts') || '[]');
   const recentPosts = posts.slice(0, 3); // Get the 3 most recent posts
   
   if (recentPosts.length === 0) {
@@ -170,4 +217,60 @@ function updateRecentPosts() {
 
 // Extract and update categories
 function updateCategories() {
-  const categoriesElement = do
+  const categoriesElement = document.getElementById('categories-list');
+  if (!categoriesElement) return;
+  
+  // Get posts from localStorage
+  const posts = JSON.parse(localStorage.getItem('poojaBlogPosts') || '[]');
+  
+  // Extract all categories from posts
+  const allCategories = [];
+  posts.forEach(post => {
+    if (post.categories && Array.isArray(post.categories)) {
+      post.categories.forEach(category => {
+        if (!allCategories.includes(category)) {
+          allCategories.push(category);
+        }
+      });
+    }
+  });
+  
+  // Sort categories alphabetically
+  allCategories.sort();
+  
+  if (allCategories.length === 0) {
+    categoriesElement.innerHTML = `
+      <li style="color: #c4b5fd; font-style: italic;">No categories yet</li>
+    `;
+    return;
+  }
+  
+  let html = '';
+  allCategories.forEach(category => {
+    html += `
+      <li style="margin-bottom: 8px;">
+        <a href="#" onclick="filterPostsByCategory('${escapeHtml(category)}'); return false;" style="color: #e2d9f3; text-decoration: none; display: flex; align-items: center;">
+          <span style="margin-right: 10px;">🏷️</span> ${escapeHtml(category)}
+        </a>
+      </li>
+    `;
+  });
+  
+  categoriesElement.innerHTML = html;
+}
+
+// Initialize category filter functionality
+function initializeCategoryFilter() {
+  window.filterPostsByCategory = function(category) {
+    // This function would be defined in the main app script
+    // Just ensuring it's available through the window object
+    if (typeof filterPosts === 'function') {
+      filterPosts(category);
+    } else {
+      console.error('filterPosts function not found');
+    }
+  };
+}
+
+// Call this function when the DOM is ready
+document.addEventListener('DOMContentLoaded', initializeSidebar);
